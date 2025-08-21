@@ -35,8 +35,32 @@ public class Parser {
         return this.parse_Expr();
     }
     private Expr parse_Expr(){
-        return parse_primary_Expr();
+        return parse_additive_Expr();
     }
+
+    private Expr parse_additive_Expr(){
+        Expr left = this.parse_multiplicative_Expr();
+        while (this.at().getValue().equals("+") || this.at().getValue().equals("-")) {
+            String operator = this.eat().getValue();
+            Expr right = this.parse_multiplicative_Expr();
+            left = new BinaryExpr(left, right, operator);
+        }
+        return left;
+    };
+
+    private Expr parse_multiplicative_Expr(){
+        Expr left = this.parse_primary_Expr();
+        while (this.at().getValue().equals("/") || this.at().getValue().equals("*") || this.at().getValue().equals("%")) {
+            String operator = this.eat().getValue();
+            Expr right = this.parse_primary_Expr();
+            left = new BinaryExpr(left, right, operator);
+        }
+        return left;
+    };
+
+    //PRECEDENCE LEVEL for now just do the arithmetic
+
+    // parsing expressions
     private Expr parse_primary_Expr(){
         TokenTypes tk =  this.at().getTokenType();
 
@@ -46,7 +70,7 @@ public class Parser {
             case TokenTypes.Number:
                 return new NumericalLiteral(Float.parseFloat(this.eat().getValue()));
             default:
-                System.out.println("Unexpected token found during parsing!" + this.at());
+                System.out.println("Unexpected token found during parsing! : " + this.at().getValue());
                 System.exit(0);
                 return new Identifier("");
         }

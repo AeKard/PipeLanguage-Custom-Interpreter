@@ -22,7 +22,7 @@ public class Lexer {
         List<TokenRule> rules = Arrays.asList(
             new TokenRule(TokenTypes.Identifier, "^[A-za-z_][A-za-z0-9_]*"),
             new TokenRule(TokenTypes.Number, "^[0-9]+"),
-            new TokenRule(TokenTypes.BinaryOperator, "^(\\+|\\-|\\*|/)"),
+            new TokenRule(TokenTypes.BinaryOperator, "^(\\+|\\-|\\*|%|/)"),
             new TokenRule(TokenTypes.OpenParen, "^\\("),
             new TokenRule(TokenTypes.CloseParen, "^\\)"),
             new TokenRule(TokenTypes.Equals, "^=")

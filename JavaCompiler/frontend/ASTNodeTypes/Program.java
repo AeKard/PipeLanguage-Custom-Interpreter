@@ -17,4 +17,18 @@ public class Program extends Stms{
     public ArrayList<Stms> getBody(){
         return body;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n\n\t AST Syntax Tree \n");
+        sb.append("Kind: ").append(super.kind).append(" [\n");
+
+        for (Stms stm : body) {
+            sb.append("\t  ").append(stm.toString()).append("\n");
+        }
+
+        sb.append("]");
+        return sb.toString();
+    }
 }
