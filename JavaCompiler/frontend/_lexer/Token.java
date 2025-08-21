@@ -1,4 +1,4 @@
-package frontend;
+package frontend._lexer;
 
 public class Token{
     String value;

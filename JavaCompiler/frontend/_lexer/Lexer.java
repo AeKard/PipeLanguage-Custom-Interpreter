@@ -1,12 +1,11 @@
 
-package frontend;
+package frontend._lexer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 
 import java.util.regex.Matcher;
-
 
 public class Lexer {
     String src;
@@ -23,7 +22,10 @@ public class Lexer {
         List<TokenRule> rules = Arrays.asList(
             new TokenRule(TokenTypes.Identifier, "^[A-za-z_][A-za-z0-9_]*"),
             new TokenRule(TokenTypes.Number, "^[0-9]+"),
-            new TokenRule(TokenTypes.BinaryOperator, "^(=|\\+|\\-|\\*|/)")
+            new TokenRule(TokenTypes.BinaryOperator, "^(\\+|\\-|\\*|/)"),
+            new TokenRule(TokenTypes.OpenParen, "^\\("),
+            new TokenRule(TokenTypes.CloseParen, "^\\)"),
+            new TokenRule(TokenTypes.Equals, "^=")
         );
 
         String input = src;
@@ -46,6 +48,7 @@ public class Lexer {
                 input = input.substring(1);
             }
         }
+        tokens.add(new Token("EOF", TokenTypes.EOF));
         return tokens;
     }
 }

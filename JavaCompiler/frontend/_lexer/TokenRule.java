@@ -1,4 +1,4 @@
-package frontend;
+package frontend._lexer;
 import java.util.regex.Pattern;
 
 public class TokenRule {
