@@ -23,9 +23,9 @@ public class Parser {
         this.tokens = lex.Tokenizer();
 
         Program program = new Program(new ArrayList<>());
-
+        
         while (not_eof()) {
-            System.out.println("src: " + src);
+            // System.out.println("src: " + src);
             program.getBody().add(parse_Stms());
         }
         return program;

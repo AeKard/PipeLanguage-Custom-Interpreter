@@ -9,6 +9,6 @@ public class NumericalLiteral extends Expr { // Inherit from expression
 
     @Override
     public String toString(){
-        return "Number | ("+ Float.toString(symbol) +")";
+        return "\n{ NumericalLiteral : ("+ Float.toString(symbol) +")}";
     }
 }

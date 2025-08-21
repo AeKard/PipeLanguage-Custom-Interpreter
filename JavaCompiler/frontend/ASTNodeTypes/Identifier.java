@@ -9,6 +9,6 @@ public class Identifier extends Expr { // Inherit from expression
 
     @Override
     public String toString(){
-        return "Number | ("+ this.symbol +")";
+        return "\n{ Identifier : ("+ this.symbol +") }";
     }
 }
