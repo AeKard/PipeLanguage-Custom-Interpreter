@@ -17,7 +17,7 @@ public class main {
             if(source.equals("exit") || source.isEmpty()) {System.out.println("\n\nExit.."); sc.close(); return;}
             
             Program prog = parse.produceAST(source);
-            System.out.println(prog);
+            // System.out.println(prog);
             // System.out.println("Type: Program \nBody: " + prog.getBody() + " }");
         }
     }    

@@ -25,7 +25,6 @@ public class Parser {
         Program program = new Program(new ArrayList<>());
         
         while (not_eof()) {
-            // System.out.println("src: " + src);
             program.getBody().add(parse_Stms());
         }
         return program;
@@ -63,7 +62,6 @@ public class Parser {
     // parsing expressions
     private Expr parse_primary_Expr(){
         TokenTypes tk =  this.at().getTokenType();
-
         switch (tk) {
             case TokenTypes.Identifier:
                 return new Identifier(this.eat().getValue());
