@@ -8,6 +8,7 @@ import frontend._lexer.Lexer;
 
 import java.util.ArrayList;
 
+//TODO: Add multiplicative if it encounter sudden open paren
 
 public class Parser {
     private ArrayList<Token> tokens = new ArrayList<>();
@@ -18,6 +19,16 @@ public class Parser {
         Token prev = tokens.removeFirst();
         return prev;
     }
+    private Token expect(TokenTypes tk, String err){
+        Token prev = this.tokens.removeFirst(); 
+
+        if(prev == null|| prev.getValue().isEmpty() || prev.getTokenType() != tk){
+            System.out.println("Parser Error:\n"+ " " + err + " " + prev.getValue() + " - Expecting: "+ tk);
+            System.exit(0);
+        }
+        return prev;
+    }
+
     public Program produceAST(String src){
         Lexer lex = new Lexer(src);
         this.tokens = lex.Tokenizer();
@@ -50,7 +61,7 @@ public class Parser {
     private Expr parse_multiplicative_Expr(){
         Expr left = this.parse_primary_Expr();
         while (this.at().getValue().equals("/") || this.at().getValue().equals("*") || this.at().getValue().equals("%")) {
-            String operator = this.eat().getValue();
+            String operator = this.eat().getValue(); 
             Expr right = this.parse_primary_Expr();
             left = new BinaryExpr(left, right, operator);
         }
@@ -67,6 +78,11 @@ public class Parser {
                 return new Identifier(this.eat().getValue());
             case TokenTypes.Number:
                 return new NumericalLiteral(Float.parseFloat(this.eat().getValue()));
+            case TokenTypes.OpenParen:
+                this.eat();
+                Expr value = this.parse_Expr();
+                this.expect(TokenTypes.CloseParen, "\"Unexpected token found inside parenthesised expression. Expected closing parenthesis.\",");
+                return value;
             default:
                 System.out.println("Unexpected token found during parsing! : " + this.at().getValue());
                 System.exit(0);
