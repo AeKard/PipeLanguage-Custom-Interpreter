@@ -42,11 +42,45 @@ public class Parser {
     }
 
     private Stms parse_Stms(){
+        switch (this.at().getTokenType()) {
+            case TokenTypes.Let:
+            case TokenTypes.Const:
+                this.parse_var_decleration();
+                break;
+            case TokenTypes.Fn:
+                System.out.println("Implementing Function");
+                System.exit(0);
+                break;
+            default:
+                break;
+        }
         return this.parse_Expr();
     }
     private Expr parse_Expr(){
         return parse_additive_Expr();
     }
+
+    private Stms parse_var_decleration(){
+        boolean isConstant = this.eat().getTokenType() == TokenTypes.Const;
+        String identifier = this.expect(TokenTypes.Identifier, "Expected Identifier | const keyword").getValue();
+
+        if(this.at().getTokenType() == TokenTypes.SemiColon){
+            this.eat();
+            if(isConstant){
+                System.out.println("Must assigne value to constant expression. No value provided.");
+                System.exit(0);
+            }
+            return new VarDecleration(false, identifier);
+        }
+
+        this.expect(TokenTypes.Equals, "Expect equals token following identifier in var declaration.");
+
+        VarDecleration declaration = new VarDecleration(isConstant, identifier, this.parse_Expr());
+
+        this.expect(TokenTypes.SemiColon, "Variable declaration statment must end with semicolon.");
+
+        return declaration;
+    }   
 
     private Expr parse_additive_Expr(){
         Expr left = this.parse_multiplicative_Expr();
@@ -77,7 +111,7 @@ public class Parser {
             case TokenTypes.Identifier:
                 return new Identifier(this.eat().getValue());
             case TokenTypes.Number:
-                return new NumericalLiteral(Float.parseFloat(this.eat().getValue()));
+                return new NumericalLiteral(this.eat().getValue());
             case TokenTypes.OpenParen:
                 this.eat();
                 Expr value = this.parse_Expr();

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Arrays;
 
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Lexer {
     String src;
@@ -20,20 +21,27 @@ public class Lexer {
         ArrayList<Token> tokens = new ArrayList<>();
         
         List<TokenRule> rules = Arrays.asList(
+            new TokenRule(TokenTypes.Const, "^\\bConst\\b"),
             new TokenRule(TokenTypes.Identifier, "^[A-za-z_][A-za-z0-9_]*"),
             new TokenRule(TokenTypes.Number, "^[0-9]+"),
             new TokenRule(TokenTypes.BinaryOperator, "^(\\+|\\-|\\*|%|/)"),
             new TokenRule(TokenTypes.OpenParen, "^\\("),
             new TokenRule(TokenTypes.CloseParen, "^\\)"),
+            new TokenRule(TokenTypes.OpenBracket,"^\\["),
+            new TokenRule(TokenTypes.CloseBracket,"^\\]"),
+            new TokenRule(TokenTypes.OpenBrace,"^\\{"),
+            new TokenRule(TokenTypes.CloseBrace,"^\\}"),
             new TokenRule(TokenTypes.Equals, "^=")
         );
-
+        Pattern ws = Pattern.compile("^\\s");
         String input = src;
 
         while(!input.isEmpty()){
             boolean matched = false;
             for(TokenRule rule : rules){
+                if(ws.matcher(input).lookingAt()){break;}
                 Matcher matcher = rule.pattern.matcher(input);
+                // System.out.println(matcher + " : " + input);
                 if(matcher.lookingAt()){
                     String value = matcher.group();
                     tokens.add(new Token(value, rule.type));
@@ -42,7 +50,6 @@ public class Lexer {
                     break;
                 }
             }
-
             if(!matched){
                 // IGNORE SPACES FOR NOW OR SOMETHING UNKNOWS IGNORE
                 input = input.substring(1);

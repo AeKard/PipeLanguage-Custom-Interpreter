@@ -19,16 +19,17 @@ public class Program extends Stms{
     }
 
     @Override
-    public String toString() {
+    public String toString(int indent) {
+        String pad = "  ".repeat(indent);
         StringBuilder sb = new StringBuilder();
-        sb.append("\n\n\t AST Syntax Tree \n");
-        sb.append("Kind: ").append(super.kind).append(" [\n");
+        sb.append(pad).append("Program [\n");
 
         for (Stms stm : body) {
-            sb.append("\t  ").append(stm.toString()).append("\n");
+            sb.append(stm.toString(indent + 1)).append("\n");
         }
 
-        sb.append("]");
+        sb.append(pad).append("]");
         return sb.toString();
     }
 }
+

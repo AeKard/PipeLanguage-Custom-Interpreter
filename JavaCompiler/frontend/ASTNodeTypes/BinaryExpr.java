@@ -12,30 +12,25 @@ public class BinaryExpr extends Expr { // Inherit from expression
         this.op = op;
     }
 
-    @Override
-    public String toString() {
-        return toString(0); // start at indent 0
-    }
+    public NodeType getType(){return this.kind;}
+    public String getValue(){return this.op;}
+    public Expr getLeft(){return this.left;}
+    public Expr getRight(){return this.right;}
 
-    private String toString(int indent) {
-        String pad = "  ".repeat(indent);       // 2 spaces per indent
-        String childPad = "  ".repeat(indent+1);
+    @Override
+    public String toString(int indent) {
+        String pad = "  ".repeat(indent);
+        String childPad = "  ".repeat(indent + 1);
 
         StringBuilder sb = new StringBuilder();
         sb.append(pad).append("{\n");
         sb.append(childPad).append("kind: BinaryExpr,\n");
 
         sb.append(childPad).append("left:\n");
-        if (left instanceof BinaryExpr)
-            sb.append(((BinaryExpr) left).toString(indent+2)).append("\n");
-        else
-            sb.append("  ".repeat(indent+2)).append(left).append("\n");
+        sb.append(left.toString(indent + 2)).append("\n");
 
         sb.append(childPad).append("right:\n");
-        if (right instanceof BinaryExpr)
-            sb.append(((BinaryExpr) right).toString(indent+2)).append("\n");
-        else
-            sb.append("  ".repeat(indent+2)).append(right).append("\n");
+        sb.append(right.toString(indent + 2)).append("\n");
 
         sb.append(childPad).append("Operator: { value: ").append(op).append(" }\n");
         sb.append(pad).append("}");

@@ -1,8 +1,10 @@
 package frontend.ASTNodeTypes;
 
-enum NodeType{
+public enum NodeType{
     Program, // 
     NumericalLiteral, //expression
     Identifier, //expression
     BinaryExpr, // expression
+    VarDecleration,
+
 };

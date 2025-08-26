@@ -1,12 +1,37 @@
 package frontend._lexer;
 
 public enum TokenTypes{
-    Equals, //
+    //Statements
+    // Program,
+    // VarDecleration,
+    // FunctionDecleration,    
+    // //Expression
+    // AssignmentExpr,
+    // MemberExpr,
+    // CallExpr,
+
+    //Literals Type
     Number, //
     Identifier, //
+
+    //KeyWord
+    Let,
+    Const,
+    Fn,
+
+    //Grouping * Operator
+    BinaryOperator, //
+    Equals, //
+    Dot,
+    Colon,
+    SemiColon,
     OpenParen, //
     CloseParen, //
-    BinaryOperator, //
-    Let,
+    OpenBrace,//
+    CloseBrace,//
+    OpenBracket,//
+    CloseBracket,//
+
+    UNKNOWS,
     EOF,
 };
