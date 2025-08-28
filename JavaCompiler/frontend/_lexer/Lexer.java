@@ -22,6 +22,8 @@ public class Lexer {
         
         List<TokenRule> rules = Arrays.asList(
             new TokenRule(TokenTypes.Const, "^\\bConst\\b"),
+            new TokenRule(TokenTypes.Let, "^\\bLet\\b"),
+            new TokenRule(TokenTypes.SemiColon, "^;"),
             new TokenRule(TokenTypes.Identifier, "^[A-za-z_][A-za-z0-9_]*"),
             new TokenRule(TokenTypes.Number, "^[0-9]+"),
             new TokenRule(TokenTypes.BinaryOperator, "^(\\+|\\-|\\*|%|/)"),
@@ -55,6 +57,7 @@ public class Lexer {
                 input = input.substring(1);
             }
         }
+        
         tokens.add(new Token("EOF", TokenTypes.EOF));
         return tokens;
     }

@@ -1,9 +1,13 @@
 package backend.values;
 
 public class BooleanVal extends RuntimeVal {
-    String value = null;
+    boolean value = true;
 
-    public BooleanVal(String value){
+    public RuntimeVal MK_BOOL(boolean b){
+        return new BooleanVal(b);      
+    }
+
+    public BooleanVal(Boolean value){
         super(ValueType.Boolean);
         this.value = value;
     }

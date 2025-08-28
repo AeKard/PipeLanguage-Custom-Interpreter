@@ -15,10 +15,19 @@ public class VarDecleration extends Stms{
         super(NodeType.VarDecleration);
         this.constant = constant;
         this.identifier = identifier;
+        this.value = null;
+    }
+
+    public Expr getValue(){
+        return this.value;
+    }
+    public String getIdentifier(){
+        return this.identifier;
     }
 
     @Override
     public String toString(int indent) {
-        return toString(0); 
+        String pad = " ".repeat(indent);
+        return pad + "\t{ kind: \"varDec\", value: "+ this.identifier +" }";
     }
 }

@@ -13,7 +13,9 @@ import java.util.ArrayList;
 public class Parser {
     private ArrayList<Token> tokens = new ArrayList<>();
 
-    private boolean not_eof(){ return this.tokens.get(0).getTokenType() != TokenTypes.EOF;} //get type
+    private boolean not_eof(){ 
+        return this.tokens.get(0).getTokenType() != TokenTypes.EOF;
+    } //get type
     private Token at(){return this.tokens.get(0);} //return token
     private Token eat(){
         Token prev = tokens.removeFirst();
@@ -35,7 +37,7 @@ public class Parser {
 
         Program program = new Program(new ArrayList<>());
         
-        while (not_eof()) {
+        while (this.not_eof()) {
             program.getBody().add(parse_Stms());
         }
         return program;
@@ -45,21 +47,20 @@ public class Parser {
         switch (this.at().getTokenType()) {
             case TokenTypes.Let:
             case TokenTypes.Const:
-                this.parse_var_decleration();
-                break;
+                return this.parse_var_decleration();
             case TokenTypes.Fn:
                 System.out.println("Implementing Function");
                 System.exit(0);
                 break;
             default:
-                break;
-        }
+                return this.parse_Expr();
+            }
         return this.parse_Expr();
     }
     private Expr parse_Expr(){
         return parse_additive_Expr();
     }
-
+    
     private Stms parse_var_decleration(){
         boolean isConstant = this.eat().getTokenType() == TokenTypes.Const;
         String identifier = this.expect(TokenTypes.Identifier, "Expected Identifier | const keyword").getValue();
@@ -107,6 +108,7 @@ public class Parser {
     // parsing expressions
     private Expr parse_primary_Expr(){
         TokenTypes tk =  this.at().getTokenType();
+        System.out.println(tk);
         switch (tk) {
             case TokenTypes.Identifier:
                 return new Identifier(this.eat().getValue());
