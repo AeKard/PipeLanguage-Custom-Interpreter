@@ -1,5 +1,6 @@
 package frontend.ASTNodeTypes;
 
+
 public class VarDecleration extends Stms{
     boolean constant;
     String identifier;
@@ -24,10 +25,12 @@ public class VarDecleration extends Stms{
     public String getIdentifier(){
         return this.identifier;
     }
-
+    public boolean getIsContant(){
+        return this.constant;
+    }
     @Override
     public String toString(int indent) {
         String pad = " ".repeat(indent);
-        return pad + "\t{ kind: \"varDec\", value: "+ this.identifier +" }";
+        return pad + "{ kind: \" "+ this.kind+ "\" , Identifier: \""+ this.identifier +"\"} , Value: " + this.value.getValue();
     }
 }

@@ -1,0 +1,7 @@
+
+Let test = 10;
+Let num1 = 5;
+print(test , "+", num1, "= ", test + num1);
+test = test * 15 + (10 / 5 + num1 + test)
+print("Result is:",test);
+test + 5

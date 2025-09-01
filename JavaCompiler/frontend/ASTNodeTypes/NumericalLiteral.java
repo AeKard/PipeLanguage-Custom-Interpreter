@@ -1,5 +1,6 @@
 package frontend.ASTNodeTypes;
 
+
 public class NumericalLiteral extends Expr { // Inherit from expression
     String symbol;
     public NumericalLiteral(String symbol){
@@ -17,7 +18,7 @@ public class NumericalLiteral extends Expr { // Inherit from expression
 
     @Override
     public String toString(int indent){
-        String pad = " ".repeat(indent);
-        return pad + "\t{ kind: \"NumericalLiteral\", value: "+ symbol +" }";
+        String pad = " ".repeat(indent * 2);
+        return pad + "{ kind: \"NumericalLiteral\", value: "+ symbol +" }";
     }
 }

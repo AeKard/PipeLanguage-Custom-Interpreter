@@ -1,5 +1,6 @@
 package frontend.ASTNodeTypes;
 
+
 public class Identifier extends Expr { // Inherit from expression
     String symbol;
     public Identifier(String symbol){
@@ -11,12 +12,12 @@ public class Identifier extends Expr { // Inherit from expression
     }
     
     public String getValue(){
-        return symbol;
+        return this.symbol;
     }
 
     @Override
     public String toString(int indent){
-        String pad = " ".repeat(indent);
-        return pad + "\t{ kind : \"Identifier\", value: "+ this.symbol +" }";
+        String pad = " ".repeat(indent * 2);
+        return pad + "{ kind : \"Identifier\", value: "+ this.symbol +" }";
     }
 }

@@ -12,25 +12,27 @@ public enum TokenTypes{
 
     //Literals Type
     Number, //
+    StringLiteral,
     Identifier, //
 
     //KeyWord
     Let,
     Const,
     Fn,
-
+    Print,
     //Grouping * Operator
     BinaryOperator, //
     Equals, //
     Dot,
     Colon,
     SemiColon,
+    Comma,
     OpenParen, //
     CloseParen, //
-    OpenBrace,//
-    CloseBrace,//
-    OpenBracket,//
-    CloseBracket,//
+    // OpenBrace,//
+    // CloseBrace,//
+    // OpenBracket,//
+    // CloseBracket,//
 
     UNKNOWS,
     EOF,

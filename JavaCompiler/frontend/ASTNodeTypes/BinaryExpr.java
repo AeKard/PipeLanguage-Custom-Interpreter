@@ -1,5 +1,6 @@
 package frontend.ASTNodeTypes;
 
+
 public class BinaryExpr extends Expr { // Inherit from expression
     Expr left;
     Expr right;
@@ -33,7 +34,7 @@ public class BinaryExpr extends Expr { // Inherit from expression
         sb.append(right.toString(indent + 2)).append("\n");
 
         sb.append(childPad).append("Operator: { value: ").append(op).append(" }\n");
-        sb.append(pad).append("}");
+        sb.append(pad).append(pad + "}");
         return sb.toString();
     }
 }

@@ -14,8 +14,7 @@ public class NumberVal extends RuntimeVal{
         return Double.parseDouble(value);
     }
 
-    @Override
     public String toString(){
-        return "Result: " + value;
+        return value;
     }
 }

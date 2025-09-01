@@ -24,16 +24,20 @@ public class Lexer {
             new TokenRule(TokenTypes.Const, "^\\bConst\\b"),
             new TokenRule(TokenTypes.Let, "^\\bLet\\b"),
             new TokenRule(TokenTypes.SemiColon, "^;"),
+            new TokenRule(TokenTypes.Print, "^\\bprint\\b"),
             new TokenRule(TokenTypes.Identifier, "^[A-za-z_][A-za-z0-9_]*"),
+            new TokenRule(TokenTypes.Comma, "^,"),
+            new TokenRule(TokenTypes.StringLiteral, "^\"[^\"]*\""),
+            new TokenRule(TokenTypes.StringLiteral, "^'[^']*'"),
             new TokenRule(TokenTypes.Number, "^[0-9]+"),
             new TokenRule(TokenTypes.BinaryOperator, "^(\\+|\\-|\\*|%|/)"),
             new TokenRule(TokenTypes.OpenParen, "^\\("),
             new TokenRule(TokenTypes.CloseParen, "^\\)"),
-            new TokenRule(TokenTypes.OpenBracket,"^\\["),
-            new TokenRule(TokenTypes.CloseBracket,"^\\]"),
-            new TokenRule(TokenTypes.OpenBrace,"^\\{"),
-            new TokenRule(TokenTypes.CloseBrace,"^\\}"),
             new TokenRule(TokenTypes.Equals, "^=")
+            // new TokenRule(TokenTypes.OpenBracket,"^\\["),
+            // new TokenRule(TokenTypes.CloseBracket,"^\\]"),
+            // new TokenRule(TokenTypes.OpenBrace,"^\\{"),
+            // new TokenRule(TokenTypes.CloseBrace,"^\\}"),
         );
         Pattern ws = Pattern.compile("^\\s");
         String input = src;

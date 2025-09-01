@@ -1,18 +1,20 @@
-package backend._environment;
+package backend;
 
 import backend.values.RuntimeVal;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
-// TODO: ADD FOR CONSTANT
 public class Environement {
     Environement parent;
     Map<String, RuntimeVal> variables;
-    
+    Set<String> constants;
     public Environement(Environement env){
         this.parent = env;
         this.variables = new HashMap<>();
+        this.constants = new HashSet<>();
     }
     public Environement resolve(String varname){
         if(this.variables.containsKey(varname)){
@@ -25,18 +27,29 @@ public class Environement {
         return this.parent.resolve(varname);
     }
 
-    public RuntimeVal declareVar(String varname,  RuntimeVal value){
+    public RuntimeVal declareVar(String varname,  RuntimeVal value, boolean constant){
         if(this.variables.containsKey(varname)){
-            System.out.println("Variable : \"" + varname + "\"decalared");
+            System.out.println("Variable : \"" + varname + "\" already decalared");
             System.exit(0);
         };
         this.variables.put(varname, value);
-    
+        if(constant){
+            this.constants.add(varname);
+        }
         return value;
     }
     public RuntimeVal assignVar(String varname, RuntimeVal value){
         Environement env = this.resolve(varname);
-        env.variables.put(varname, value);
+        if (env.constants.contains(varname)) {
+            System.out.println("Cannot reassign value because it's constant");
+            return env.variables.get(varname); 
+        }
+
+        if (env.variables.containsKey(varname)) {
+            env.variables.put(varname, value); 
+        } else {
+            System.out.println("Variable '" + varname + "' not declared");
+        }
         return value;
     }
     public RuntimeVal lookup(String varname){

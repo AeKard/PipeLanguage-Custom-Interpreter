@@ -6,5 +6,10 @@ public enum NodeType{
     Identifier, //expression
     BinaryExpr, // expression
     VarDecleration,
+    AssignmentExpr,
+    StringLiteral,
 
+    Print,
 };
+
+

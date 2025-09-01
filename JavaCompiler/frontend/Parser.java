@@ -1,14 +1,12 @@
-package frontend._parser;
+package frontend;
 
 import frontend.ASTNodeTypes.*;
-
 import frontend._lexer.Token;
 import frontend._lexer.TokenTypes;
 import frontend._lexer.Lexer;
 
 import java.util.ArrayList;
-
-//TODO: Add multiplicative if it encounter sudden open paren
+import java.util.List;
 
 public class Parser {
     private ArrayList<Token> tokens = new ArrayList<>();
@@ -48,17 +46,40 @@ public class Parser {
             case TokenTypes.Let:
             case TokenTypes.Const:
                 return this.parse_var_decleration();
-            case TokenTypes.Fn:
-                System.out.println("Implementing Function");
-                System.exit(0);
-                break;
+            case TokenTypes.Print:
+                return this.eval_print();
+            // case TokenTypes.Fn:
+            //     System.out.println("Implementing Function");
+            //     System.exit(0);
+            //     break;
             default:
                 return this.parse_Expr();
-            }
-        return this.parse_Expr();
+        }
     }
+    private Stms eval_print(){
+        this.eat();
+        this.expect(TokenTypes.OpenParen, "Expect ( Paren");
+
+        List<Expr> args = new ArrayList<>();
+
+        if(this.at().getTokenType() != TokenTypes.CloseParen){
+            args.add(this.parse_Expr());
+            System.out.print(this.at().getTokenType());
+            while (this.at().getTokenType() == TokenTypes.Comma) {
+                // System.out.print(this.at());
+                this.eat();
+                args.add(this.parse_Expr());
+            }
+        }
+        this.expect(TokenTypes.CloseParen, "Expected ')' after print arguments");
+        this.expect(TokenTypes.SemiColon, "Missing semicolon after print statement");
+
+        return new PrintStm(args);
+    }
+
     private Expr parse_Expr(){
-        return parse_additive_Expr();
+        return parse_assignment_expr();
+        // return parse_additive_Expr();
     }
     
     private Stms parse_var_decleration(){
@@ -83,6 +104,22 @@ public class Parser {
         return declaration;
     }   
 
+    // Hadnle here " Drake"
+
+    private Expr parse_assignment_expr(){
+        if(this.at().getTokenType() == TokenTypes.StringLiteral){
+            Token strTok = this.eat();
+            return new StringLiteral(strTok.getValue());
+        }
+        Expr left = this.parse_additive_Expr(); // swithc if object is implemented
+        if(this.at().getTokenType() == TokenTypes.Equals){
+            this.eat();
+            Expr value = this.parse_assignment_expr();
+            return new AssignmentExpr(left, value);
+        }
+
+        return left;
+    }
     private Expr parse_additive_Expr(){
         Expr left = this.parse_multiplicative_Expr();
         while (this.at().getValue().equals("+") || this.at().getValue().equals("-")) {
@@ -92,7 +129,6 @@ public class Parser {
         }
         return left;
     };
-
     private Expr parse_multiplicative_Expr(){
         Expr left = this.parse_primary_Expr();
         while (this.at().getValue().equals("/") || this.at().getValue().equals("*") || this.at().getValue().equals("%")) {
@@ -108,7 +144,7 @@ public class Parser {
     // parsing expressions
     private Expr parse_primary_Expr(){
         TokenTypes tk =  this.at().getTokenType();
-        System.out.println(tk);
+        // System.out.println(tk);
         switch (tk) {
             case TokenTypes.Identifier:
                 return new Identifier(this.eat().getValue());

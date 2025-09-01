@@ -2,6 +2,7 @@ package frontend.ASTNodeTypes;
 
 import java.util.ArrayList;
 
+
 public class Program extends Stms{
     ArrayList<Stms> body; 
     
@@ -22,10 +23,11 @@ public class Program extends Stms{
     public String toString(int indent) {
         String pad = "  ".repeat(indent);
         StringBuilder sb = new StringBuilder();
+        sb.append(pad).append("\t AST ");
         sb.append(pad).append("Program [\n");
 
         for (Stms stm : body) {
-            sb.append(stm.toString(indent + 1)).append("\n");
+            sb.append(stm.toString(indent + 2)).append("\n");
         }
 
         sb.append(pad).append("]");
