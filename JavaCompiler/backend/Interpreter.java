@@ -6,13 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import backend.values.*;
-//TODO: Check for Zerodivisionvalue
 public class Interpreter{
-
-    private NullVal MK_Null(){
-        return new NullVal(null);
-    }
-
+    // Create a Null Class
+    private NullVal MK_Null(){return new NullVal(null);}
+    // Evaluate the program statement
     private RuntimeVal eval_prog(Program program, Environement env){
         RuntimeVal lastEval = this.MK_Null();
 
@@ -22,36 +19,48 @@ public class Interpreter{
 
         return lastEval;
     }
-
-    private NumberVal eval_numeric_binary_expr(NumberVal lhs, NumberVal rhs, String op){
-        Double result;
-        if(op.equals("+") ){result = lhs.getValue() + rhs.getValue();}
-        else if(op.equals("-")) {result = lhs.getValue() - rhs.getValue();}
-        else if(op.equals("/")) {result = lhs.getValue() / rhs.getValue();}
-        else if(op.equals("*")) {result = lhs.getValue() * rhs.getValue();}
-        else{result = lhs.getValue() / rhs.getValue();}
-        // System.out.println(lhs.getValue()+ " "+op + " " +rhs.getValue() + " = "+ Double.toString(result) + "\n\n");
-        
-        return new NumberVal(Double.toString(result));
-    }
-
+    // Evaluate the left and right expression for Binary TODO: and for String and fix ZeroDivisionValue
     private RuntimeVal eval_binary_expr(BinaryExpr binop, Environement env){
-        NumberVal lhs = (NumberVal) evalute(binop.getLeft(), env);
-        NumberVal rhs = (NumberVal) evalute(binop.getRight(), env);
+        RuntimeVal lhs =  evalute(binop.getLeft(), env);
+        RuntimeVal rhs =  evalute(binop.getRight(), env);
+        String operator = binop.getValue();
 
-        if (lhs.getType().equals(ValueType.Number) && rhs.getType().equals(ValueType.Number)){
-            return eval_numeric_binary_expr(lhs, rhs, binop.getValue());
+        if(lhs instanceof NumberVal && rhs instanceof NumberVal){
+            double l = ((NumberVal) lhs).getValue();
+            double r = ((NumberVal) rhs).getValue();
+            switch (operator) {
+                case "+": return new NumberVal(Double.toString(l + r)); 
+                case "-": return new NumberVal(Double.toString(l - r));
+                case "*": return new NumberVal(Double.toString(l * r));
+                case "/": return new NumberVal(Double.toString(l / r));
+                case "%": return new NumberVal(Double.toString(l % r));
+                
+                case ">": return new BooleanVal(l > r);
+                case "<": return new BooleanVal(l < r);
+                case ">=": return new BooleanVal(l >= r);
+                case "<=": return new BooleanVal(l <= r);
+                case "==": return new BooleanVal(l == r);
+                case "!=": return new BooleanVal(l != r);
+                default:
+                    break;
+            }
+            
         }
+        // System.out.println("Unsupported binary operation: " + operator +
+        // " with " + ((NumberVal) lhs).getType() + " and " + ((NumberVal) rhs).getType());
+        //  System.exit(1);
         return this.MK_Null();
     }
-
+    // Enviroment use lookup
     private RuntimeVal eval_identifier(Identifier identifier, Environement env){
         return env.lookup(identifier.getValue());
     }
+    // Environment Var declaration
     private RuntimeVal eval_var_declaration(VarDecleration decleration, Environement env){
         RuntimeVal value = (decleration.getValue() == null) ? this.MK_Null(): this.evalute(decleration.getValue(), env);
         return env.declareVar(decleration.getIdentifier(), value, decleration.getIsContant());
     }
+    // Environment assigning
     private RuntimeVal eval_assinment(AssignmentExpr node, Environement env){
         if(!node.getAssigneExpr().getType().equals(NodeType.Identifier)){
             System.out.println("Invalid assignment Expression");
@@ -60,17 +69,35 @@ public class Interpreter{
         String varname = node.getAssigneExpr().getValue();
         return env.assignVar(varname, evalute(node.getValueExpr(), env));
     }
+    
+    // Evaluate print statement use join
     private RuntimeVal eval_print(PrintStm pstm, Environement env) {
-    List<String> outputs = new ArrayList<>();
+        List<String> outputs = new ArrayList<>();
 
-    for (Expr expr : pstm.getValue()) {
-        RuntimeVal val = this.evalute(expr, env);
-        outputs.add(val.toString());
+        for (Expr expr : pstm.getValue()) {
+            RuntimeVal val = this.evalute(expr, env);
+            outputs.add(val.toString());
+        }
+        System.out.println(String.join(" ", outputs));
+
+        return this.MK_Null();
     }
-    System.out.println(String.join(" ", outputs));
 
-    return this.MK_Null();
-}
+    private RuntimeVal eval_if_statement(IfStm fstm, Environement env){
+        RuntimeVal cond = this.evalute(fstm.getCondition(), env);
+        if(!(cond instanceof BooleanVal)){
+            System.out.println("Condition in if-statement must be a boolean");
+        }
+        boolean condition = ((BooleanVal) cond).getValue();
+        if (condition){
+            return this.evalute(fstm.getThenBranch(), env);
+        } else if (fstm.getElseBranch() != null){
+            return this.evalute(fstm.getElseBranch(), env);
+        }
+        return this.MK_Null();
+    }
+
+    // TODO: FIX THE NAMING IN evaluate method
     public RuntimeVal evalute(Stms astNode, Environement env){
         // System.out.println(astNode.getType() + " <- AST Level");
         switch(astNode.getType()){
@@ -80,6 +107,9 @@ public class Interpreter{
             case NodeType.NumericalLiteral:
                 NumericalLiteral num = (NumericalLiteral) astNode;
                 return new NumberVal(num.getValue());
+            case NodeType.If:
+                IfStm ifNode = (IfStm) astNode;
+                return this.eval_if_statement(ifNode, env);
             case NodeType.Identifier:
                 Identifier ident = (Identifier) astNode;
                 return this.eval_identifier(ident, env);

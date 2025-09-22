@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+// TODO: FIX my lexer use Stream for fixing boiler plater
 public class Lexer {
     String src;
     long pos;
@@ -23,6 +24,8 @@ public class Lexer {
         List<TokenRule> rules = Arrays.asList(
             new TokenRule(TokenTypes.Const, "^\\bConst\\b"),
             new TokenRule(TokenTypes.Let, "^\\bLet\\b"),
+            new TokenRule(TokenTypes.IfStm, "^\\bIf\\b"),
+            new TokenRule(TokenTypes.ElseStm, "^\\bElse\\b"),
             new TokenRule(TokenTypes.SemiColon, "^;"),
             new TokenRule(TokenTypes.Print, "^\\bprint\\b"),
             new TokenRule(TokenTypes.Identifier, "^[A-za-z_][A-za-z0-9_]*"),
@@ -31,6 +34,7 @@ public class Lexer {
             new TokenRule(TokenTypes.StringLiteral, "^'[^']*'"),
             new TokenRule(TokenTypes.Number, "^[0-9]+"),
             new TokenRule(TokenTypes.BinaryOperator, "^(\\+|\\-|\\*|%|/)"),
+            new TokenRule(TokenTypes.ComparisonOperator,"^(!=|<=|>=|>|<|==)"),
             new TokenRule(TokenTypes.OpenParen, "^\\("),
             new TokenRule(TokenTypes.CloseParen, "^\\)"),
             new TokenRule(TokenTypes.Equals, "^=")

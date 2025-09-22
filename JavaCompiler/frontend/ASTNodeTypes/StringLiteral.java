@@ -16,6 +16,6 @@ public class StringLiteral extends Expr{
 
     @Override
     public String toString(int indent){
-        return "";
+        return "a";
     }
 }

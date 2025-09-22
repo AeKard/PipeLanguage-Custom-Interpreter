@@ -13,7 +13,9 @@ import frontend.ASTNodeTypes.Program;
 import frontend.Parser;
 
 import java.nio.file.Paths;
-public class main {
+
+// TODO: Fix the my AST print statements
+public class Main {
 
     private static void useSourceFile(Interpreter Interp, Parser parse, Environement env, String path){
         System.out.print("\tFileMode \n\n> ");
@@ -37,7 +39,7 @@ public class main {
             if(source.equals("exit") || source.isEmpty()) {System.out.println("\n\nExit.."); sc.close(); return;}
             
             Program prog = parse.produceAST(source);
-            System.out.println(prog);
+            // System.out.println(prog);
             RuntimeVal result = Interp.evalute(prog, env);
         }
     }
@@ -59,9 +61,11 @@ public class main {
             String type = sc.nextLine();        
             switch (type.toUpperCase()) {
                 case "A":
+                case "1":
                     useSourceFile(Interp, parse, env, path);
-                    return;
+                return;
                 case "B":
+                case "2":
                     useTerminal(Interp, parse, env, sc);
                     return;
                 default:

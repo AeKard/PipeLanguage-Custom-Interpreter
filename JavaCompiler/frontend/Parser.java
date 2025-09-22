@@ -11,17 +11,21 @@ import java.util.List;
 public class Parser {
     private ArrayList<Token> tokens = new ArrayList<>();
 
+    //Check If End of line
     private boolean not_eof(){ 
         return this.tokens.get(0).getTokenType() != TokenTypes.EOF;
-    } //get type
-    private Token at(){return this.tokens.get(0);} //return token
+    }
+    //Check current token
+    private Token at(){return this.tokens.get(0);}
+    //Remove Token
     private Token eat(){
         Token prev = tokens.removeFirst();
         return prev;
     }
+    //Check for Expected Token type
     private Token expect(TokenTypes tk, String err){
+        // System.out.println(this.tokens.size() + "|" + this.at().getValue() + err);
         Token prev = this.tokens.removeFirst(); 
-
         if(prev == null|| prev.getValue().isEmpty() || prev.getTokenType() != tk){
             System.out.println("Parser Error:\n"+ " " + err + " " + prev.getValue() + " - Expecting: "+ tk);
             System.exit(0);
@@ -29,6 +33,7 @@ public class Parser {
         return prev;
     }
 
+    //Produce the Abstract Syntax Tree
     public Program produceAST(String src){
         Lexer lex = new Lexer(src);
         this.tokens = lex.Tokenizer();
@@ -41,13 +46,16 @@ public class Parser {
         return program;
     }
 
+    //Parse the type of statement
     private Stms parse_Stms(){
         switch (this.at().getTokenType()) {
             case TokenTypes.Let:
             case TokenTypes.Const:
                 return this.parse_var_decleration();
             case TokenTypes.Print:
-                return this.eval_print();
+                return this.parse_print_Stms();
+            case TokenTypes.IfStm:
+                return this.parse_if_Stms();
             // case TokenTypes.Fn:
             //     System.out.println("Implementing Function");
             //     System.exit(0);
@@ -56,7 +64,8 @@ public class Parser {
                 return this.parse_Expr();
         }
     }
-    private Stms eval_print(){
+    //Parse Print statement and its rules
+    private Stms parse_print_Stms(){
         this.eat();
         this.expect(TokenTypes.OpenParen, "Expect ( Paren");
 
@@ -64,9 +73,8 @@ public class Parser {
 
         if(this.at().getTokenType() != TokenTypes.CloseParen){
             args.add(this.parse_Expr());
-            System.out.print(this.at().getTokenType());
+            // System.out.print(this.at().getTokenType());
             while (this.at().getTokenType() == TokenTypes.Comma) {
-                // System.out.print(this.at());
                 this.eat();
                 args.add(this.parse_Expr());
             }
@@ -76,12 +84,7 @@ public class Parser {
 
         return new PrintStm(args);
     }
-
-    private Expr parse_Expr(){
-        return parse_assignment_expr();
-        // return parse_additive_Expr();
-    }
-    
+    //Parse Var Decleration
     private Stms parse_var_decleration(){
         boolean isConstant = this.eat().getTokenType() == TokenTypes.Const;
         String identifier = this.expect(TokenTypes.Identifier, "Expected Identifier | const keyword").getValue();
@@ -103,23 +106,47 @@ public class Parser {
 
         return declaration;
     }   
+    //Parse if statement and its rules
+    private Stms parse_if_Stms(){
+        this.eat();
 
-    // Hadnle here " Drake"
-
-    private Expr parse_assignment_expr(){
-        if(this.at().getTokenType() == TokenTypes.StringLiteral){
-            Token strTok = this.eat();
-            return new StringLiteral(strTok.getValue());
+        if(this.at().getValue().equals("(")) this.eat();
+        Expr condition = this.parse_Expr(); 
+        if(this.at().getValue().equals(")")) this.eat();
+        Stms thenBranch = this.parse_Stms();
+        Stms elseBranch = null;
+        if(this.at().getTokenType() == TokenTypes.ElseStm){
+            this.eat();
+            elseBranch = this.parse_Stms();
         }
-        Expr left = this.parse_additive_Expr(); // swithc if object is implemented
+        return new IfStm(thenBranch, elseBranch, condition);
+    }
+    //Parse Expression -> PRECEDENCE LEVEL
+    private Expr parse_Expr(){
+        return parse_assignment_expr();
+    }
+    // PRECEDENCE LEVEL
+    // assignment -> comparison -> additive -> multiplicative -> parse primary
+    private Expr parse_assignment_expr(){
+        Expr left = this.parse_comparision_Expr(); 
         if(this.at().getTokenType() == TokenTypes.Equals){
             this.eat();
             Expr value = this.parse_assignment_expr();
             return new AssignmentExpr(left, value);
         }
-
+        
         return left;
     }
+    private Expr parse_comparision_Expr(){
+        Expr left = this.parse_additive_Expr();
+        while (this.at().getTokenType() == TokenTypes.ComparisonOperator) {
+            String operator = this.eat().getValue();
+            Expr right = this.parse_additive_Expr();
+            left = new BinaryExpr(left, right, operator);
+        }
+        return left;
+    }
+
     private Expr parse_additive_Expr(){
         Expr left = this.parse_multiplicative_Expr();
         while (this.at().getValue().equals("+") || this.at().getValue().equals("-")) {
@@ -138,10 +165,6 @@ public class Parser {
         }
         return left;
     };
-
-    //PRECEDENCE LEVEL for now just do the arithmetic
-
-    // parsing expressions
     private Expr parse_primary_Expr(){
         TokenTypes tk =  this.at().getTokenType();
         // System.out.println(tk);
@@ -150,6 +173,8 @@ public class Parser {
                 return new Identifier(this.eat().getValue());
             case TokenTypes.Number:
                 return new NumericalLiteral(this.eat().getValue());
+            case TokenTypes.StringLiteral:
+                return new StringLiteral(this.eat().getValue());
             case TokenTypes.OpenParen:
                 this.eat();
                 Expr value = this.parse_Expr();

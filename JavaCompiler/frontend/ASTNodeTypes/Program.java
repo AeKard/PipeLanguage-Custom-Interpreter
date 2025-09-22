@@ -23,7 +23,6 @@ public class Program extends Stms{
     public String toString(int indent) {
         String pad = "  ".repeat(indent);
         StringBuilder sb = new StringBuilder();
-        sb.append(pad).append("\t AST ");
         sb.append(pad).append("Program [\n");
 
         for (Stms stm : body) {

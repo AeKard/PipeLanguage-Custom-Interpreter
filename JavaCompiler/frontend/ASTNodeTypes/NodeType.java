@@ -9,6 +9,7 @@ public enum NodeType{
     AssignmentExpr,
     StringLiteral,
 
+    If,
     Print,
 };
 

@@ -16,17 +16,18 @@ public class Environement {
         this.variables = new HashMap<>();
         this.constants = new HashSet<>();
     }
+    // Check if the variable exist
     public Environement resolve(String varname){
         if(this.variables.containsKey(varname)){
             return this;
         }
         if(this.parent == null){
-            System.out.println("Variable does not exit: \""+varname+ "\"");
+            System.out.println("Variable does not exit: \""+varname+"\"");
             System.exit(0);
         }
         return this.parent.resolve(varname);
     }
-
+    // declare var and evaluate if constant
     public RuntimeVal declareVar(String varname,  RuntimeVal value, boolean constant){
         if(this.variables.containsKey(varname)){
             System.out.println("Variable : \"" + varname + "\" already decalared");
@@ -38,6 +39,7 @@ public class Environement {
         }
         return value;
     }
+    // Assign value to the var and eval if constant
     public RuntimeVal assignVar(String varname, RuntimeVal value){
         Environement env = this.resolve(varname);
         if (env.constants.contains(varname)) {
@@ -52,8 +54,10 @@ public class Environement {
         }
         return value;
     }
+    // Check if that varname exist
     public RuntimeVal lookup(String varname){
         Environement env = this.resolve(varname);
         return env.variables.get(varname);
     }
+    
 }

@@ -11,4 +11,8 @@ public class BooleanVal extends RuntimeVal {
         super(ValueType.Boolean);
         this.value = value;
     }
+
+    public boolean getValue(){
+        return value;
+    }
 }

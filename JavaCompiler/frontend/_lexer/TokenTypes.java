@@ -18,11 +18,25 @@ public enum TokenTypes{
     //KeyWord
     Let,
     Const,
-    Fn,
+    // Fn,
     Print,
+    IfStm,
+    ElseStm,
+
+
     //Grouping * Operator
     BinaryOperator, //
+    ComparisonOperator,
+    //Comparison Op
+    NotEqual,
+    EqualEqual,
+    LessThan,
+    LessEqual,
+    GreaterThan,
+    GreaterEqual,
+
     Equals, //
+
     Dot,
     Colon,
     SemiColon,
