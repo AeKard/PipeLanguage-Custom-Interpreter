@@ -23,8 +23,19 @@ public class AssignmentExpr extends Expr{
         return "AssignemntExpr Does not return a String Value";
     }
     @Override
-    public String toString(int indent){
-        String pad = " ".repeat(indent);
-        return pad + "Assigne: { "+ assigne +"}\n"+pad+"Value:{ "+ value +"}";
+    public String toString(int indent) {
+        StringBuilder sb = new StringBuilder();
+        String pad = "  ".repeat(indent * 2);
+        String childPad = "  ".repeat(indent * 4);
+
+        sb.append("\n" + pad).append("kind: AssignmentExpr");
+
+        sb.append("\n").append(childPad).append("    assigne:").append("\n")
+          .append(assigne.toString(indent + 4));
+
+        sb.append("\n").append(childPad).append("    value:").append(childPad)
+          .append(value.toString(indent + 4));
+
+        return sb.toString();
     }
 }

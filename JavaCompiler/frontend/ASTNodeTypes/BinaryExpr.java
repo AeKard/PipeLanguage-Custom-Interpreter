@@ -1,5 +1,6 @@
 package frontend.ASTNodeTypes;
 
+// Binary Expression 
 
 public class BinaryExpr extends Expr { // Inherit from expression
     Expr left;
@@ -20,21 +21,21 @@ public class BinaryExpr extends Expr { // Inherit from expression
 
     @Override
     public String toString(int indent) {
-        String pad = "  ".repeat(indent);
-        String childPad = "  ".repeat(indent + 1);
-
+        String pad = " ".repeat(indent * 4);
         StringBuilder sb = new StringBuilder();
-        sb.append(pad).append("{\n");
-        sb.append(childPad).append("kind: BinaryExpr,\n");
 
-        sb.append(childPad).append("left:\n");
+        sb.append("\n" + pad).append("kind: BinaryExpr\n");
+
+        sb.append(pad).append("    left:\n");
         sb.append(left.toString(indent + 2)).append("\n");
 
-        sb.append(childPad).append("right:\n");
+        sb.append(pad).append("    right:\n");
         sb.append(right.toString(indent + 2)).append("\n");
 
-        sb.append(childPad).append("Operator: { value: ").append(op).append(" }\n");
-        sb.append(pad).append(pad + "}");
+        sb.append(pad).append("    operator:\n");
+        sb.append(pad).append("        value: ").append(this.op);
+
         return sb.toString();
     }
+
 }

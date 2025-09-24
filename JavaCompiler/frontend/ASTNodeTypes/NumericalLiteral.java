@@ -15,10 +15,14 @@ public class NumericalLiteral extends Expr { // Inherit from expression
     public String getValue(){
         return symbol;
     }
-
     @Override
-    public String toString(int indent){
-        String pad = " ".repeat(indent * 2);
-        return pad + "{ kind: \"NumericalLiteral\", value: "+ symbol +" }";
+    public String toString(int indent) {
+        String pad = " ".repeat(indent * 4);
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("\n" + pad).append("kind: NumericalLiteral\n");
+        sb.append(pad).append("    value: ").append(this.symbol).append("\n");
+
+        return sb.toString();
     }
 }

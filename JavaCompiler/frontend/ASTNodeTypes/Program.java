@@ -23,13 +23,11 @@ public class Program extends Stms{
     public String toString(int indent) {
         String pad = "  ".repeat(indent);
         StringBuilder sb = new StringBuilder();
-        sb.append(pad).append("Program [\n");
+        sb.append(pad).append("Program:");
 
         for (Stms stm : body) {
             sb.append(stm.toString(indent + 2)).append("\n");
         }
-
-        sb.append(pad).append("]");
         return sb.toString();
     }
 }

@@ -7,6 +7,8 @@ test = test * 15 + (10 / 5 + num1 + test)
 print(sentence,test);
 test + 5
 
-If (2 > 5) print("hi"); Else print("else time");
+If (2 > 5) 
+print("hi");
+Else print("else time");
 If (2 < 5) 
 print("hi");

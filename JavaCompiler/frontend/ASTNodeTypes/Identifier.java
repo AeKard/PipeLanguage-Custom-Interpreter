@@ -15,9 +15,13 @@ public class Identifier extends Expr { // Inherit from expression
         return this.symbol;
     }
 
-    @Override
-    public String toString(int indent){
-        String pad = " ".repeat(indent * 2);
-        return pad + "{ kind : \"Identifier\", value: "+ this.symbol +" }";
+    public String toString(int indent) {
+        String pad = " ".repeat(indent * 4);
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(pad).append("kind: Identifier\n");
+        sb.append(pad).append("    value: ").append(this.symbol);
+
+        return sb.toString();
     }
 }

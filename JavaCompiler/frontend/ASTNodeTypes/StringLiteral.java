@@ -13,9 +13,14 @@ public class StringLiteral extends Expr{
     public NodeType getType() {
         return this.kind;
     }
-
     @Override
-    public String toString(int indent){
-        return "a";
+    public String toString(int indent) {
+        String pad = " ".repeat(indent * 4);
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("\n" + pad).append("kind: StringLiterals\n");
+        sb.append(pad).append("    value: ").append(this.value).append("\n");
+
+        return sb.toString();
     }
 }

@@ -8,7 +8,7 @@ import java.util.List;
 import backend.values.*;
 public class Interpreter{
     // Create a Null Class
-    private NullVal MK_Null(){return new NullVal(null);}
+    private NullVal MK_Null(){return new NullVal("aaNull");}
     // Evaluate the program statement
     private RuntimeVal eval_prog(Program program, Environement env){
         RuntimeVal lastEval = this.MK_Null();
@@ -46,6 +46,12 @@ public class Interpreter{
             }
             
         }
+        if(lhs instanceof StringVal && rhs instanceof StringVal){
+            String l = ((StringVal) lhs).getValue();
+            String r = ((StringVal) rhs).getValue();
+            return new BooleanVal(l.equals(r));
+        }
+
         // System.out.println("Unsupported binary operation: " + operator +
         // " with " + ((NumberVal) lhs).getType() + " and " + ((NumberVal) rhs).getType());
         //  System.exit(1);
@@ -76,7 +82,7 @@ public class Interpreter{
 
         for (Expr expr : pstm.getValue()) {
             RuntimeVal val = this.evalute(expr, env);
-            outputs.add(val.toString());
+            outputs.add((val.toString() == null) ? "Null": val.toString());
         }
         System.out.println(String.join(" ", outputs));
 

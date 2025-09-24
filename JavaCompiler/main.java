@@ -14,7 +14,15 @@ import frontend.Parser;
 
 import java.nio.file.Paths;
 
-// TODO: Fix the my AST print statements
+/*
+ * TODO: Fix the AST print statements
+ * TODO: While loop
+ * TODO: create Block of statement 
+ * ****************
+ * TODO: FOR LOOP
+ * TODO: Funtions
+ * TODO: Array
+ */
 public class Main {
 
     private static void useSourceFile(Interpreter Interp, Parser parse, Environement env, String path){
@@ -37,8 +45,8 @@ public class Main {
             System.out.print("\tTerminal Mode\n\n> ");
             String source = sc.nextLine();
             if(source.equals("exit") || source.isEmpty()) {System.out.println("\n\nExit.."); sc.close(); return;}
-            
             Program prog = parse.produceAST(source);
+            System.out.println(prog);
             // System.out.println(prog);
             RuntimeVal result = Interp.evalute(prog, env);
         }
@@ -50,7 +58,7 @@ public class Main {
         Environement env = new Environement(null);
         
         String path = "source.txt";
-        System.out.println("V.1 - Programming language");
+        System.out.println(" === Programming language ===");
         env.declareVar("true", new BooleanVal(true), true);
         env.declareVar("false", new BooleanVal(false), true);
         env.declareVar("null", new NullVal(null), true);

@@ -2,6 +2,7 @@ package frontend.ASTNodeTypes;
 
 
 public class IfStm extends Expr{
+    // Use List for then branch
     Expr condition;
     Stms thenBranch;
     Stms elseBranch;

@@ -30,7 +30,12 @@ public class VarDecleration extends Stms{
     }
     @Override
     public String toString(int indent) {
-        String pad = " ".repeat(indent);
-        return pad + "{ kind: \" "+ this.kind+ "\" , Identifier: \""+ this.identifier +"\"} , Value: " + this.value.getValue();
+        String pad = " ".repeat(indent * 4);
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("\n" + pad).append("kind: VarDecleration\n");
+        sb.append(pad).append("    value: ").append((this.value == null)? "Null" : this.value.toString(4)).append("\n");
+
+        return sb.toString();
     }
 }

@@ -19,8 +19,19 @@ public class PrintStm extends Stms{
     }
 
     @Override
-    public String toString(int indent){
-        String pad = " ".repeat(indent);
-        return pad + "Type: { "+ this.kind + "} Value:{ \"List to be printed\" }";
+    public String toString(int indent) {
+
+        String pad = "  ".repeat(indent * 2);
+        String childPath = "  ".repeat(indent * 3);
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(pad).append("kind: Print\n");
+        sb.append(childPath).append("Expressions:\n");
+
+        for (Expr expr : expression) {
+            sb.append(expr.toString(4)).append("\n");
+        }
+
+        return sb.toString();
     }
 }
