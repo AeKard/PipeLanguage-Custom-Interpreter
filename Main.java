@@ -32,7 +32,7 @@ public class Main {
             Program prog = parse.produceAST(source);
             System.out.println(prog);
             System.out.println("======Terminal Printing======");
-            RuntimeVal result = Interp.evalute(prog, env);
+            Interp.evalute(prog, env);
         } catch (IOException e) {
             System.out.println("File Error :" + e);
             System.exit(0);
@@ -48,7 +48,7 @@ public class Main {
             Program prog = parse.produceAST(source);
             System.out.println(prog);
             // System.out.println(prog);
-            RuntimeVal result = Interp.evalute(prog, env);
+            Interp.evalute(prog, env);
         }
     }
     public static void main(String[] args) {
