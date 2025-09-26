@@ -87,7 +87,7 @@ public class Parser {
     //Parse Var Decleration
     private Stms parse_var_decleration(){
         boolean isConstant = this.eat().getTokenType() == TokenTypes.Const;
-        String identifier = this.expect(TokenTypes.Identifier, "Expected Identifier | const keyword").getValue();
+        String identifier = this.expect(TokenTypes.Identifier, "Expected Identifier | \"tap\" keyword").getValue();
 
         if(this.at().getTokenType() == TokenTypes.SemiColon){
             this.eat();

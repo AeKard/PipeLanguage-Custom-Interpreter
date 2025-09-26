@@ -16,6 +16,6 @@ public class StringVal extends RuntimeVal{
     }
     @Override
     public String toString(){
-        return this.value.substring(1, this.value.length() - 1);
+        return this.value;
     }
 }

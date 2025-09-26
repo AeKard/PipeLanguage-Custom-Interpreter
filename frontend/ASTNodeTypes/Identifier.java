@@ -16,6 +16,7 @@ public class Identifier extends Expr { // Inherit from expression
     }
 
     public String toString(int indent) {
+        if(indent == 2) indent = 0;
         String pad = " ".repeat(indent + 4);
         StringBuilder sb = new StringBuilder();
 

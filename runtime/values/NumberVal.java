@@ -10,7 +10,10 @@ public class NumberVal extends RuntimeVal{
     public ValueType getType(){
         return this.type;
     }
-    public Double getValue(){
+    public String getValue(){
+        return value;
+    }
+    public double getAsDouble() {
         return Double.parseDouble(value);
     }
 

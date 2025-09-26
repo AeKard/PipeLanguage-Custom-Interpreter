@@ -22,18 +22,18 @@ public class Lexer {
         ArrayList<Token> tokens = new ArrayList<>();
         
         List<TokenRule> rules = Arrays.asList(
-            new TokenRule(TokenTypes.Const, "^\\bConst\\b"),
-            new TokenRule(TokenTypes.Let, "^\\bLet\\b"),
-            new TokenRule(TokenTypes.IfStm, "^\\bIf\\b"),
-            new TokenRule(TokenTypes.ElseIf, "^\\bElif\\b"),
-            new TokenRule(TokenTypes.ElseStm, "^\\bElse\\b"),
+            new TokenRule(TokenTypes.Const, "^\\bsealed\\b"),
+            new TokenRule(TokenTypes.Let, "^\\btap\\b"),
+            new TokenRule(TokenTypes.IfStm, "^\\bpipe\\b"),
+            new TokenRule(TokenTypes.ElseIf, "^\\bbranch\\b"),
+            new TokenRule(TokenTypes.ElseStm, "^\\bdrain\\b"),
             new TokenRule(TokenTypes.SemiColon, "^;"),
-            new TokenRule(TokenTypes.Print, "^\\bprint\\b"),
-            new TokenRule(TokenTypes.Identifier, "^[A-za-z_][A-za-z0-9_]*"), // fix this use LET|CONST only 
+            new TokenRule(TokenTypes.Print, "^\\bflow\\b"),
+            new TokenRule(TokenTypes.Identifier, "^[A-Za-z_][A-Za-z0-9_]*"),
             new TokenRule(TokenTypes.Comma, "^,"),
             new TokenRule(TokenTypes.StringLiteral, "^\"[^\"]*\""),
             new TokenRule(TokenTypes.StringLiteral, "^'[^']*'"),
-            new TokenRule(TokenTypes.Number, "^[0-9]+"),
+            new TokenRule(TokenTypes.Number, "^[0-9]+(\\.[0-9]+)?"),
             new TokenRule(TokenTypes.BinaryOperator, "^(\\+|\\-|\\*|%|/)"),
             new TokenRule(TokenTypes.ComparisonOperator,"^(!=|<=|>=|>|<|==)"),
             new TokenRule(TokenTypes.OpenParen, "^\\("),

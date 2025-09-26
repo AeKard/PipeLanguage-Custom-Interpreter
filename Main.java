@@ -19,9 +19,10 @@ import java.nio.file.Paths;
  * TODO: While loop
  * TODO: create Block of statement 
  * ****************
- * TODO: FOR LOOP
+ * TODO: if statement evaluation in runtime
  * TODO: Funtions
  * TODO: Array
+ * TODO: fix the ^(sealed|tap)\s+[A-Za-z_][A-Za-z0-9_]*
  */
 public class Main {
 
@@ -57,7 +58,7 @@ public class Main {
         Parser parse = new Parser();
         Environement env = new Environement(null);
         
-        String path = "source.txt";
+        String path = "source.mpipe";
         System.out.println(" === Programming language ===");
         env.declareVar("true", new BooleanVal(true), true);
         env.declareVar("false", new BooleanVal(false), true);
