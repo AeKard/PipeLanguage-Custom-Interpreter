@@ -28,14 +28,16 @@ public class VarDecleration extends Stms{
     public boolean getIsContant(){
         return this.constant;
     }
+    
     @Override
     public String toString(int indent) {
-        String pad = " ".repeat(indent * 4);
+        String pad = " ".repeat(indent + 2);
         StringBuilder sb = new StringBuilder();
 
         sb.append("\n" + pad).append("kind: VarDecleration\n");
-        sb.append(pad).append("    value: ").append((this.value == null)? "Null" : this.value.toString(4)).append("\n");
-
+        sb.append(pad).append("Identifier: " + this.identifier + "\n" );
+        sb.append(pad).append("Constant:" + this.constant+ "\n");
+        sb.append(pad).append("value: ").append((this.value == null)? "Null" : "\n" + this.value.toString(indent + 2));
         return sb.toString();
     }
 }

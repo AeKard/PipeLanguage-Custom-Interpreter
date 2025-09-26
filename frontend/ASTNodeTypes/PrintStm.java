@@ -21,15 +21,13 @@ public class PrintStm extends Stms{
     @Override
     public String toString(int indent) {
 
-        String pad = "  ".repeat(indent * 2);
-        String childPath = "  ".repeat(indent * 3);
+        String pad = " ".repeat(indent + 2);
         StringBuilder sb = new StringBuilder();
 
-        sb.append(pad).append("kind: Print\n");
-        sb.append(childPath).append("Expressions:\n");
-
+        sb.append("\n" + pad).append("kind: Print\n");
+        sb.append(pad).append("Expressions:\n");
         for (Expr expr : expression) {
-            sb.append(expr.toString(4)).append("\n");
+            sb.append(expr.toString(indent + 2)).append("\n");
         }
 
         return sb.toString();

@@ -1,7 +1,7 @@
 # Java Interpreter: PIPE Language
 
 ## Getting Started
-    The pipe meme language, a practice language to understand interpreter
+<p> The pipe meme language, a practice language to understand interpreter</p>
 
 ### Compile
 To compile all Java files into the `out` folder, run:

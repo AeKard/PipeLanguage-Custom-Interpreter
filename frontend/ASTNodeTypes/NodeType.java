@@ -11,6 +11,7 @@ public enum NodeType{
 
     If,
     Print,
+    Block
 };
 
 

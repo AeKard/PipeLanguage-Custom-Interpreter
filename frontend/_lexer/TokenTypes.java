@@ -21,6 +21,7 @@ public enum TokenTypes{
     // Fn,
     Print,
     IfStm,
+    ElseIf,
     ElseStm,
 
 
@@ -43,8 +44,8 @@ public enum TokenTypes{
     Comma,
     OpenParen, //
     CloseParen, //
-    // OpenBrace,//
-    // CloseBrace,//
+    OpenBrace,//
+    CloseBrace,//
     // OpenBracket,//
     // CloseBracket,//
 

@@ -106,20 +106,58 @@ public class Parser {
 
         return declaration;
     }   
+    //Parse Block or statement
+    private Stms parse_block_or_stms(){
+        if(this.at().getTokenType() == TokenTypes.OpenBrace){
+            return parse_block();
+        }
+        else{
+            return parse_Stms();
+        }
+    }
+    //parse block statement
+    private Stms parse_block(){
+        this.expect(TokenTypes.OpenBrace, "Expect \"{\" to start block");
+        ArrayList<Stms> body = new ArrayList<>();
+        
+        while (this.at().getTokenType() != TokenTypes.CloseBrace) {
+            body.add(parse_Stms());
+        }
+        // System.out.println(this.at().getTokenType());
+        this.expect(TokenTypes.CloseBrace, "Expect \"}\" to end block");
+        return new BlockStms(body);
+    }
     //Parse if statement and its rules
     private Stms parse_if_Stms(){
         this.eat();
 
         if(this.at().getValue().equals("(")) this.eat();
-        Expr condition = this.parse_Expr(); 
+        Expr condition = this.parse_Expr();
         if(this.at().getValue().equals(")")) this.eat();
-        Stms thenBranch = this.parse_Stms();
-        Stms elseBranch = null;
+        
+        Stms thenBranch = parse_block_or_stms();
+        
+        IfStm root = new IfStm(thenBranch, null, condition);
+        IfStm current = root;
+        while (this.at().getTokenType() == TokenTypes.ElseIf) {
+            this.eat();
+            if(this.at().getValue().equals("(")) this.eat();
+            Expr elifCond = this.parse_Expr();
+            if(this.at().getValue().equals(")")) this.eat();
+
+            Stms elifBranch = parse_block_or_stms();
+
+            IfStm nextIf = new IfStm(thenBranch, elifBranch, elifCond);
+            current.setElseBranch(nextIf);
+            current = nextIf;
+        }
+
         if(this.at().getTokenType() == TokenTypes.ElseStm){
             this.eat();
-            elseBranch = this.parse_Stms();
+            Stms elseBranch = this.parse_block_or_stms();
+            current.setElseBranch(elseBranch);
         }
-        return new IfStm(thenBranch, elseBranch, condition);
+        return root;
     }
     //Parse Expression -> PRECEDENCE LEVEL
     private Expr parse_Expr(){

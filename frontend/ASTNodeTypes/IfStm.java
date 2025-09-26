@@ -30,8 +30,22 @@ public class IfStm extends Expr{
         return this.elseBranch;
     }
 
+    public void setElseBranch(Stms elseBranch) {
+        this.elseBranch = elseBranch;
+    }
     @Override
     public String toString(int indent){
-        return "if stms";
+        String pad = " ".repeat(indent + 2);
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("\n" + pad).append("kind: If\n");
+        sb.append(pad).append("condition:").append("\n" + condition.toString(indent + 2) + "\n");
+        sb.append(pad).append("then:\n").append(thenBranch.toString(indent));
+        if (elseBranch != null) {
+            sb.append("\n").append(pad).append("else:\n")
+              .append(elseBranch.toString(indent + 2));
+        }
+        return sb.toString();
+
     }
 }

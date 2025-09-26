@@ -25,10 +25,11 @@ public class Lexer {
             new TokenRule(TokenTypes.Const, "^\\bConst\\b"),
             new TokenRule(TokenTypes.Let, "^\\bLet\\b"),
             new TokenRule(TokenTypes.IfStm, "^\\bIf\\b"),
+            new TokenRule(TokenTypes.ElseIf, "^\\bElif\\b"),
             new TokenRule(TokenTypes.ElseStm, "^\\bElse\\b"),
             new TokenRule(TokenTypes.SemiColon, "^;"),
             new TokenRule(TokenTypes.Print, "^\\bprint\\b"),
-            new TokenRule(TokenTypes.Identifier, "^[A-za-z_][A-za-z0-9_]*"),
+            new TokenRule(TokenTypes.Identifier, "^[A-za-z_][A-za-z0-9_]*"), // fix this use LET|CONST only 
             new TokenRule(TokenTypes.Comma, "^,"),
             new TokenRule(TokenTypes.StringLiteral, "^\"[^\"]*\""),
             new TokenRule(TokenTypes.StringLiteral, "^'[^']*'"),
@@ -37,11 +38,11 @@ public class Lexer {
             new TokenRule(TokenTypes.ComparisonOperator,"^(!=|<=|>=|>|<|==)"),
             new TokenRule(TokenTypes.OpenParen, "^\\("),
             new TokenRule(TokenTypes.CloseParen, "^\\)"),
-            new TokenRule(TokenTypes.Equals, "^=")
+            new TokenRule(TokenTypes.Equals, "^="),
+            new TokenRule(TokenTypes.OpenBrace,"^\\{"),
+            new TokenRule(TokenTypes.CloseBrace,"^\\}")
             // new TokenRule(TokenTypes.OpenBracket,"^\\["),
             // new TokenRule(TokenTypes.CloseBracket,"^\\]"),
-            // new TokenRule(TokenTypes.OpenBrace,"^\\{"),
-            // new TokenRule(TokenTypes.CloseBrace,"^\\}"),
         );
         Pattern ws = Pattern.compile("^\\s");
         String input = src;

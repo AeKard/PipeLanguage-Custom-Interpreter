@@ -1,4 +1,4 @@
-package backend.values;
+package runtime.values;
 
 public class BooleanVal extends RuntimeVal {
     boolean value = true;
@@ -14,5 +14,10 @@ public class BooleanVal extends RuntimeVal {
 
     public boolean getValue(){
         return value;
+    }
+
+    @Override
+    public String toString(){
+        return (this.value) ? "true" : "false";
     }
 }

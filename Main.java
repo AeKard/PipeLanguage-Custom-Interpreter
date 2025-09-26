@@ -3,11 +3,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Scanner;
 
-import backend.values.BooleanVal;
-import backend.values.NullVal;
-import backend.values.RuntimeVal;
-import backend.Interpreter;
-import backend.Environement;
+import runtime.values.BooleanVal;
+import runtime.values.NullVal;
+import runtime.values.RuntimeVal;
+import runtime.Interpreter;
+import runtime.Environement;
 import frontend.ASTNodeTypes.Program;
 
 import frontend.Parser;
@@ -26,7 +26,7 @@ import java.nio.file.Paths;
 public class Main {
 
     private static void useSourceFile(Interpreter Interp, Parser parse, Environement env, String path){
-        System.out.print("\tFileMode \n\n> ");
+        System.out.print("\tFileMode \n\n");
         try {
             String source = Files.readString(Paths.get(path));
             Program prog = parse.produceAST(source);
@@ -42,13 +42,13 @@ public class Main {
 
     private static void useTerminal(Interpreter Interp, Parser parse, Environement env, Scanner sc){
         while (true) {
-            System.out.print("\tTerminal Mode\n\n> ");
+            System.out.print("\tTerminal Mode\n\n");
             String source = sc.nextLine();
             if(source.equals("exit") || source.isEmpty()) {System.out.println("\n\nExit.."); sc.close(); return;}
             Program prog = parse.produceAST(source);
             System.out.println(prog);
             // System.out.println(prog);
-            Interp.evalute(prog, env);
+            // Interp.evalute(prog, env);
         }
     }
     public static void main(String[] args) {
@@ -78,6 +78,7 @@ public class Main {
                     return;
                 default:
                     System.out.println("Choose from [A | B]\n==================\n\n");
+                    System.out.println("Exit..");
                     break;
             }
         }

@@ -24,16 +24,16 @@ public class AssignmentExpr extends Expr{
     }
     @Override
     public String toString(int indent) {
+        String pad = " ".repeat(indent + 2);
         StringBuilder sb = new StringBuilder();
-        String pad = "  ".repeat(indent * 2);
-        String childPad = "  ".repeat(indent * 4);
 
-        sb.append("\n" + pad).append("kind: AssignmentExpr");
+        sb.append("\n" + pad).append("kind: AssignmentExpr\n");
+        sb.append(pad).append("value:\n");
 
-        sb.append("\n").append(childPad).append("    assigne:").append("\n")
-          .append(assigne.toString(indent + 4));
+        sb.append(pad).append("  assigne:").append("\n")
+          .append(assigne.toString(indent + 2) + "\n");
 
-        sb.append("\n").append(childPad).append("    value:").append(childPad)
+        sb.append(pad).append("  value:").append("\n")
           .append(value.toString(indent + 4));
 
         return sb.toString();
