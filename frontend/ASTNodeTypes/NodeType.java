@@ -1,17 +1,24 @@
 package frontend.ASTNodeTypes;
 
 public enum NodeType{
-    Program, // 
+    Program, // stms
+
+    WhileStm, //Stms
+
+    If, //Stms
+    Print, // Stms
+    Block, // Stms
+    AssignmentExpr, // Stms
+    ReturnStm, // Stms
+    
     NumericalLiteral, //expression
     Identifier, //expression
     BinaryExpr, // expression
-    VarDecleration,
-    AssignmentExpr,
-    StringLiteral,
+    VarDecleration, //expression
+    StringLiteral, //expression
+    FunctionCall,
+    FunctionDec,
 
-    If,
-    Print,
-    Block
 };
 
 

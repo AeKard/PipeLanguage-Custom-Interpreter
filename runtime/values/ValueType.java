@@ -5,5 +5,7 @@ public enum ValueType{
     Number,
     StringVal,
     Boolean,
+    Function,
+    ReturnVal,
 };
 

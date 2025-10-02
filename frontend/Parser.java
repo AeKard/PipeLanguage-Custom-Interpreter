@@ -32,7 +32,14 @@ public class Parser {
         }
         return prev;
     }
-
+    //Check for match
+    private Boolean match(TokenTypes type){
+        if(this.at().getTokenType() == type){
+            this.eat();
+            return true;
+        }  
+        return false;
+    }
     //Produce the Abstract Syntax Tree
     public Program produceAST(String src){
         Lexer lex = new Lexer(src);
@@ -56,10 +63,12 @@ public class Parser {
                 return this.parse_print_Stms();
             case TokenTypes.IfStm:
                 return this.parse_if_Stms();
-            // case TokenTypes.Fn:
-            //     System.out.println("Implementing Function");
-            //     System.exit(0);
-            //     break;
+            case TokenTypes.WhileStm:
+                return this.parse_WhileStm();
+            case TokenTypes.Fn:
+                return this.parse_function_dec();
+            case TokenTypes.ReturnStm:
+                return this.parse_return_Stm();
             default:
                 return this.parse_Expr();
         }
@@ -67,7 +76,7 @@ public class Parser {
     //Parse Print statement and its rules
     private Stms parse_print_Stms(){
         this.eat();
-        this.expect(TokenTypes.OpenParen, "Expect ( Paren");
+        this.expect(TokenTypes.OpenParen, "Expect \"(\" befor print arguments");
 
         List<Expr> args = new ArrayList<>();
 
@@ -127,6 +136,56 @@ public class Parser {
         this.expect(TokenTypes.CloseBrace, "Expect \"}\" to end block");
         return new BlockStms(body);
     }
+    //parse FunctionDec Statement
+    private Stms parse_function_dec(){
+        this.expect(TokenTypes.Fn, "Expects \"faucet\" in variable decleration");
+        String name = this.expect(TokenTypes.Identifier, "Expects \"function name\"").getValue();
+        this.expect(TokenTypes.OpenParen, "Expected '(' after function name");
+        List<String> params = new ArrayList<>();
+        if(this.at().getTokenType() != TokenTypes.CloseParen){
+            do {
+                params.add(this.expect(TokenTypes.Identifier, "Expect parameter name").getValue());
+            } while (this.match(TokenTypes.Comma));
+        }
+        this.expect(TokenTypes.CloseParen, "Expect \")\" after parameterse");
+        BlockStms body = (BlockStms) parse_block();
+
+        return new FuncDecStm(name, params, body);
+    }
+    //parse FunctionCall Statement
+    private Expr parse_fn_call(Expr Callee){
+        this.expect(TokenTypes.OpenParen, "Expect '(' after function name");
+        List<Expr> args = new ArrayList<>();
+        if(this.at().getTokenType() != TokenTypes.CloseParen){
+            do {
+                args.add(this.parse_Expr());
+            } while (this.match(TokenTypes.Comma));
+        }
+        this.eat();
+        return new FuncCallStm(Callee, args);
+    }
+    //parse Return Statment
+    private Stms parse_return_Stm(){
+        this.expect(TokenTypes.ReturnStm, "Expect \"spill\" Keyword");
+        Expr value = null;
+        if(this.at().getTokenType() != TokenTypes.SemiColon){
+            value = this.parse_Expr();
+        } 
+        this.expect(TokenTypes.SemiColon, "Expect \";\" after return value");
+        return new ReturnStm(value);
+    }
+    //Parse While Statement
+    private Stms parse_WhileStm(){
+        this.eat();
+
+        if(this.at().getValue().equals("(")) this.eat();
+        Expr condition = this.parse_Expr();
+        if(this.at().getValue().equals(")")) this.eat();
+
+        Stms body = parse_block_or_stms();
+        
+        return new WhileStm(body, condition);
+    }
     //Parse if statement and its rules
     private Stms parse_if_Stms(){
         this.eat();
@@ -139,7 +198,7 @@ public class Parser {
         
         IfStm root = new IfStm(thenBranch, null, condition);
         IfStm current = root;
-        while (this.at().getTokenType() == TokenTypes.ElseIf) {
+        while (this.at().getTokenType() == TokenTypes.ElseIfStm) {
             this.eat();
             if(this.at().getValue().equals("(")) this.eat();
             Expr elifCond = this.parse_Expr();
@@ -170,9 +229,9 @@ public class Parser {
         if(this.at().getTokenType() == TokenTypes.Equals){
             this.eat();
             Expr value = this.parse_assignment_expr();
+            this.expect(TokenTypes.SemiColon, "Variable declaration statment must end with semicolon. ");
             return new AssignmentExpr(left, value);
         }
-        
         return left;
     }
     private Expr parse_comparision_Expr(){
@@ -184,7 +243,6 @@ public class Parser {
         }
         return left;
     }
-
     private Expr parse_additive_Expr(){
         Expr left = this.parse_multiplicative_Expr();
         while (this.at().getValue().equals("+") || this.at().getValue().equals("-")) {
@@ -208,7 +266,14 @@ public class Parser {
         // System.out.println(tk);
         switch (tk) {
             case TokenTypes.Identifier:
-                return new Identifier(this.eat().getValue());
+                Expr ident = new Identifier(this.at().getValue());
+                this.eat();
+
+                if(this.at().getTokenType() == TokenTypes.OpenParen){
+                    System.out.println("test fncall");
+                    return this.parse_fn_call(ident);
+                }
+                return ident;
             case TokenTypes.Number:
                 return new NumericalLiteral(this.eat().getValue());
             case TokenTypes.StringLiteral:

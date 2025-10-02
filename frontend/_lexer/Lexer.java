@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-// TODO: FIX my lexer use Stream for fixing boiler plater
 public class Lexer {
     String src;
     long pos;
@@ -23,9 +22,12 @@ public class Lexer {
         
         List<TokenRule> rules = Arrays.asList(
             new TokenRule(TokenTypes.Const, "^\\bsealed\\b"),
+            new TokenRule(TokenTypes.WhileStm, "^\\bcycle\\b"),
+            new TokenRule(TokenTypes.Fn, "^\\bfaucet\\b"),
+            new TokenRule(TokenTypes.ReturnStm, "^\\bspill\\b"),
             new TokenRule(TokenTypes.Let, "^\\btap\\b"),
             new TokenRule(TokenTypes.IfStm, "^\\bpipe\\b"),
-            new TokenRule(TokenTypes.ElseIf, "^\\bbranch\\b"),
+            new TokenRule(TokenTypes.ElseIfStm, "^\\bbranch\\b"),
             new TokenRule(TokenTypes.ElseStm, "^\\bdrain\\b"),
             new TokenRule(TokenTypes.SemiColon, "^;"),
             new TokenRule(TokenTypes.Print, "^\\bflow\\b"),
@@ -41,18 +43,18 @@ public class Lexer {
             new TokenRule(TokenTypes.Equals, "^="),
             new TokenRule(TokenTypes.OpenBrace,"^\\{"),
             new TokenRule(TokenTypes.CloseBrace,"^\\}")
+            
             // new TokenRule(TokenTypes.OpenBracket,"^\\["),
             // new TokenRule(TokenTypes.CloseBracket,"^\\]"),
         );
-        Pattern ws = Pattern.compile("^\\s");
         String input = src;
 
         while(!input.isEmpty()){
             boolean matched = false;
             for(TokenRule rule : rules){
-                if(ws.matcher(input).lookingAt()){break;}
                 Matcher matcher = rule.pattern.matcher(input);
-                // System.out.println(matcher + " : " + input);
+                // System.out.println(matcher);
+
                 if(matcher.lookingAt()){
                     String value = matcher.group();
                     tokens.add(new Token(value, rule.type));

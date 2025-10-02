@@ -1,34 +1,23 @@
 package frontend._lexer;
 
 public enum TokenTypes{
-    //Statements
-    // Program,
-    // VarDecleration,
-    // FunctionDecleration,    
-    // //Expression
-    // AssignmentExpr,
-    // MemberExpr,
-    // CallExpr,
-
-    //Literals Type
-    Number, //
+    Number, 
     StringLiteral,
-    Identifier, //
+    Identifier, 
 
-    //KeyWord
-    Let,
-    Const,
-    // Fn,
-    Print,
-    IfStm,
-    ElseIf,
-    ElseStm,
+    Let, // tap
+    Const, // sealed
+    Fn, // faucet
+    ReturnStm, // spill
+    Print, // flow
+    IfStm, // pipe
+    ElseIfStm, //branch
+    ElseStm, //drain
 
+    WhileStm, //cycle
 
-    //Grouping * Operator
-    BinaryOperator, //
+    BinaryOperator,
     ComparisonOperator,
-    //Comparison Op
     NotEqual,
     EqualEqual,
     LessThan,
@@ -36,19 +25,17 @@ public enum TokenTypes{
     GreaterThan,
     GreaterEqual,
 
-    Equals, //
+    Equals, 
 
     Dot,
     Colon,
     SemiColon,
     Comma,
-    OpenParen, //
-    CloseParen, //
-    OpenBrace,//
-    CloseBrace,//
-    // OpenBracket,//
-    // CloseBracket,//
+    OpenParen,
+    CloseParen, 
+    OpenBrace,
+    CloseBrace,
 
-    UNKNOWS,
+    Comments,
     EOF,
 };

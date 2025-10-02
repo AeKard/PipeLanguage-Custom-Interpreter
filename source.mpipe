@@ -1,19 +1,35 @@
-22
+faucet func(x, y){
+    tap sum = x + y;
+    spill sum;
+}
+
 sealed name = "Lord Drake" + "B";
 tap age = 22;
 tap codingLevel = 0;
+tap test = codingLevel;
+tap help = true;
 flow("My name is", name , "my age is", age , "and next year is", age + 1);
+
+cycle (codingLevel < 5){
+    flow("codingLevel :", codingLevel);
+    codingLevel = codingLevel + 1;
+}
 
 pipe (age >= 18){
     flow("Eligable to vote");
     pipe(codingLevel == 0){
+        flow(test);
         flow("Coding level is", codingLevel);
-        flow("Multiple complex math random:", codingLevel * age +(10 + 1 / 5 + (age / 2)));
+        pipe(help){
+            flow("Multiple complex math random:", codingLevel * age +(10 + 1 / 5 + (age / 2)));
+        }
     }branch(codingLevel == 1){
         flow("Coding level is 1");
     }drain{
         flow("I dont know your level");
-    }
+}
 }drain{
     flow("not Eligable to vote");
 }
+
+flow(func(1, 2));

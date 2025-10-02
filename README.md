@@ -1,37 +1,48 @@
-# Java Interpreter: PIPE Language
+# Java Custom Interpreter: PIPE Language
 
 ## Getting Started
-<p>The **PIPE meme language**, a practice programming. language to understand interpreter 
-This project made for school final project on Programming Languages.</p>
+<p>The **PIPE meme language**, a practice programming language interpreter using java
+This project made for final project on Programming Languages.</p>
 
 ### Reserved Keywords
 **Variable Decleration**
 - `let` -> `tap`
 - `const` -> `sealed`
+
 **Control Structure**
 - `if` -> `pipe`
 - `elif` -> `branch`
 - `else` -> `drain`
+
 **CLI (Command Line I/O)**
 - `cout` -> `flow`
-- `cin` -> `source`
+- `cin` -> `source` ❌
+
 **Repetition**
 - `while` -> `cycle`
+- `break` -> `clog` ❌
+- `continue` -> `flush` ❌
+
 **Function**
-- `def` -> `faucet`
-- `return` -> `spill`
+- `def` -> `faucet` ❌
+- `return` -> `spill` ❌
+
+**Reserved Word**
+- `true` 
+- `false` 
+- `null` 
 
 ---
 
 ### Compile
 To change the algorithm file, edit `source.mpipe`
 
-To compile all Java files into the `out` folder, run:
+To compile all Java files into the `out` folder:
 ```bash
 javac -d out *.java
 ```
 ### Run
-To run all Java files from `out` folder:
+To run the interpreter from `out` folder:
 ```bash
 java -cp out Main
 ```

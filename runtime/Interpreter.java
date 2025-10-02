@@ -25,6 +25,7 @@ public class Interpreter{
         }
         return String.valueOf(num);
     }
+    //TODO: Change Name
     private RuntimeVal eval_binary_operator_expr(BinaryExpr binop, Environement env){
         RuntimeVal lhs =  evalute(binop.getLeft(), env);
         RuntimeVal rhs =  evalute(binop.getRight(), env);
@@ -115,23 +116,88 @@ public class Interpreter{
             System.out.println("Condition in if-statement must be a boolean");
         }
         boolean condition = ((BooleanVal) cond).getValue();
+        
         if (condition){
             return this.evalute(fstm.getThenBranch(), env);
-        } else if (fstm.getElseBranch() != null){
-            return this.eval_if_statement((IfStm) fstm.getElseBranch(), env);
-        }else{
-            return this.evalute(fstm.getElseBranch(), env);
+        } 
+        else if (fstm.getElseBranch() != null){
+            if(fstm.getElseBranch() instanceof IfStm){
+                return this.eval_if_statement((IfStm) fstm.getElseBranch(), env);
+            }
+            else{
+                return this.evalute(fstm.getElseBranch(), env);
+            }
         }
+        return this.MK_Null();
     }
     // Evaluate block
-    private RuntimeVal eval_block(BlockStms block, Environement env ){
-        RuntimeVal last =this.MK_Null();
-        for(Stms stmt : block.getBody()){
+    private RuntimeVal eval_block(BlockStms block, Environement env) {
+        RuntimeVal last = this.MK_Null();
+        for (Stms stmt : block.getBody()) {
             last = this.evalute(stmt, env);
+            if (last instanceof ReturnVal) {
+                return last;
+            }
         }
         return last;
     }
-    // TODO: FIX THE NAMING IN evaluate method
+    private RuntimeVal eval_while(WhileStm whStms, Environement env){
+        RuntimeVal result = this.MK_Null();
+
+        while (true) {
+            RuntimeVal cond = this.evalute(whStms.getCondition(), env);
+            
+            if(!(cond instanceof BooleanVal)){
+                System.out.println("Conditoin in cycle-statement must be a boolean value");
+                System.exit(0);
+            }
+            boolean condition = ((BooleanVal) cond).getValue();
+
+            if(!condition){
+                break;
+            }
+            result = this.evalute(whStms.getBody(), env);
+        }
+
+        return result;
+    }
+
+    private RuntimeVal eval_funct_decl(FuncDecStm Fn, Environement env){
+        FunctionVal fnVal = new FunctionVal(Fn.getFuncName(), Fn.getParameter(), Fn.getBlockStms(), env);
+        env.declareVar(Fn.getFuncName(), fnVal, true);
+        return fnVal;
+    }
+    private RuntimeVal eval_return(ReturnStm ret, Environement env){
+        RuntimeVal val = (ret.getValue() != null) ? this.evalute(ret.getValue(), env) : this.MK_Null();
+        return new ReturnVal(val);
+    }
+    private RuntimeVal eval_fn_call(FuncCallStm call, Environement env){
+        RuntimeVal fnVal = this.evalute(call.getCallee(), env);
+
+        if (fnVal instanceof FunctionVal) {
+            FunctionVal fn = (FunctionVal) fnVal; // explicit cast
+
+            Environement localEnv = new Environement(fn.getEnv());
+
+            for (int i = 0; i < fn.getParam().size(); i++) {
+                String param = fn.getParam().get(i);
+                RuntimeVal arg = (i < call.getArgs().size())
+                        ? this.evalute(call.getArgs().get(i), env)
+                        : this.MK_Null();
+                localEnv.declareVar(param, arg, false);
+            }
+
+            RuntimeVal result = this.evalute(fn.getBody(), localEnv);
+
+            if (result instanceof ReturnVal) {
+                return ((ReturnVal) result).getValue();
+            }
+            return this.MK_Null();
+        }
+        System.out.println("Not a function " + fnVal);
+        System.exit(0);
+        return this.MK_Null();
+    }
     public RuntimeVal evalute(Stms astNode, Environement env){
         // System.out.println(astNode.getType() + " <- AST Level");
         switch(astNode.getType()){
@@ -159,6 +225,16 @@ public class Interpreter{
             case NodeType.Print:
                 PrintStm printNode = (PrintStm) astNode;
                 return this.eval_print(printNode, env);
+            case NodeType.WhileStm:
+                WhileStm ws = (WhileStm) astNode;
+                return this.eval_while(ws, env);
+            case NodeType.FunctionDec:
+                FuncDecStm Fds = (FuncDecStm) astNode;
+                return this.eval_funct_decl(Fds, env);
+            case NodeType.FunctionCall:
+                return this.eval_fn_call((FuncCallStm) astNode, env);
+            case NodeType.ReturnStm:
+                return this.eval_return((ReturnStm) astNode, env);
             case NodeType.Block:
                 BlockStms block = (BlockStms) astNode;
                 return this.eval_block(block, env);
