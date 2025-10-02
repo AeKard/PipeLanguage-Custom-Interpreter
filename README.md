@@ -24,8 +24,8 @@ This project made for final project on Programming Languages.</p>
 - `continue` -> `flush` ❌
 
 **Function**
-- `def` -> `faucet` ❌
-- `return` -> `spill` ❌
+- `def` -> `faucet` 
+- `return` -> `spill` 
 
 **Reserved Word**
 - `true` 
