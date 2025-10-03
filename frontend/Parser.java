@@ -59,6 +59,10 @@ public class Parser {
             case TokenTypes.Let:
             case TokenTypes.Const:
                 return this.parse_var_decleration();
+            case TokenTypes.ContinueStm:
+                return parse_continue_Stms();
+                case TokenTypes.BreakStm:
+                return parse_break_Stms();
             case TokenTypes.Print:
                 return this.parse_print_Stms();
             case TokenTypes.IfStm:
@@ -72,6 +76,17 @@ public class Parser {
             default:
                 return this.parse_Expr();
         }
+    }
+    //Parse Continue
+    private Stms parse_continue_Stms(){
+        this.eat();
+        this.expect(TokenTypes.SemiColon, "Expect ; at the end of flush");
+        return new ContinueStm();
+    }
+    private Stms parse_break_Stms(){
+        this.eat();
+        this.expect(TokenTypes.SemiColon, "Expect ; at the end of clog");
+        return new BreakStm();
     }
     //Parse Print statement and its rules
     private Stms parse_print_Stms(){
@@ -195,7 +210,7 @@ public class Parser {
         if(this.at().getValue().equals(")")) this.eat();
         
         Stms thenBranch = parse_block_or_stms();
-        
+        // System.out.println(thenBranch);
         IfStm root = new IfStm(thenBranch, null, condition);
         IfStm current = root;
         while (this.at().getTokenType() == TokenTypes.ElseIfStm) {
@@ -203,10 +218,11 @@ public class Parser {
             if(this.at().getValue().equals("(")) this.eat();
             Expr elifCond = this.parse_Expr();
             if(this.at().getValue().equals(")")) this.eat();
-
+            
             Stms elifBranch = parse_block_or_stms();
-
-            IfStm nextIf = new IfStm(thenBranch, elifBranch, elifCond);
+            
+            IfStm nextIf = new IfStm(elifBranch, null, elifCond);
+            // System.out.println(elifBranch);
             current.setElseBranch(nextIf);
             current = nextIf;
         }
@@ -223,9 +239,9 @@ public class Parser {
         return parse_assignment_expr();
     }
     // PRECEDENCE LEVEL
-    // assignment -> comparison -> additive -> multiplicative -> parse primary
+    // assignment 6 -> logical Expr 5 -> comparison 4 -> additive 3 -> multiplicative 2 -> parse primary 1
     private Expr parse_assignment_expr(){
-        Expr left = this.parse_comparision_Expr(); 
+        Expr left = this.parse_logical_Expr(); 
         if(this.at().getTokenType() == TokenTypes.Equals){
             this.eat();
             Expr value = this.parse_assignment_expr();
@@ -234,9 +250,20 @@ public class Parser {
         }
         return left;
     }
-    private Expr parse_comparision_Expr(){
+    private Expr parse_logical_Expr(){
+        Expr left = parse_comparison_Expr();
+        // System.out.println(this.at().getValue() + " " + this.at().getTokenType());
+        while (this.at().getTokenType() == TokenTypes.LogicOp) {
+            String operator = this.eat().getValue();
+            Expr right = parse_comparison_Expr();
+            left = new BinaryExpr(left, right, operator);
+        }
+        return left;
+    }
+
+    private Expr parse_comparison_Expr(){
         Expr left = this.parse_additive_Expr();
-        while (this.at().getTokenType() == TokenTypes.ComparisonOperator) {
+        while ((this.at().getTokenType() == TokenTypes.ComparisonOperator)) {
             String operator = this.eat().getValue();
             Expr right = this.parse_additive_Expr();
             left = new BinaryExpr(left, right, operator);
@@ -270,7 +297,6 @@ public class Parser {
                 this.eat();
 
                 if(this.at().getTokenType() == TokenTypes.OpenParen){
-                    System.out.println("test fncall");
                     return this.parse_fn_call(ident);
                 }
                 return ident;

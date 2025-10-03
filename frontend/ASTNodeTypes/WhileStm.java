@@ -18,6 +18,13 @@ public class WhileStm extends Stms{
     }
     @Override
     public String toString(int indent){
-        return "While stms";
+        String pad = " ".repeat(indent + 2);
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("\n" + pad).append("KIND: While \n");
+        sb.append(pad).append("Condition: \n" +condition.toString(indent + 2) + "\n");
+        sb.append(pad).append("value: ").append(this.body.toString(indent));
+
+        return sb.toString();
     }
 }

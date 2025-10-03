@@ -9,9 +9,7 @@ public class BlockStms extends Stms{
         super(NodeType.Block);
         this.body = body;
     }   
-    public ArrayList<Stms> getBody(){
-        return this.body;
-    }
+    public ArrayList<Stms> getBody(){return this.body;}
     
     @Override
     public String toString(int indent){
@@ -19,8 +17,8 @@ public class BlockStms extends Stms{
         String childPad = " ".repeat(indent + 4 + 2);
         StringBuilder sb = new StringBuilder();
         
-        sb.append(pad).append("kind: Block\n");
-        sb.append(pad).append("value:\n");
+        sb.append("\n" + pad).append("KIND: Block\n");
+        sb.append(pad).append("value:");
         for (Stms stm : body) {
             sb.append(childPad).append(stm.toString(indent + 4));
         }

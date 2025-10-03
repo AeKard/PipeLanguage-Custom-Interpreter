@@ -4,6 +4,8 @@ public enum NodeType{
     Program, // stms
 
     WhileStm, //Stms
+    BreakStm,
+    ContinueStm,
 
     If, //Stms
     Print, // Stms

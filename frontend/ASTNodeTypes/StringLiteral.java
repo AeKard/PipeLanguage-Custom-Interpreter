@@ -20,7 +20,7 @@ public class StringLiteral extends Expr{
         String pad = " ".repeat(indent + 4);
         StringBuilder sb = new StringBuilder();
 
-        sb.append(pad).append("kind: StringLiterals\n");
+        sb.append(pad).append("KIND: StringLiterals\n");
         sb.append(pad).append("value: ").append(this.value);
 
         return sb.toString();

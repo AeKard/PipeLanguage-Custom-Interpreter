@@ -16,12 +16,11 @@ This project made for final project on Programming Languages.</p>
 
 **CLI (Command Line I/O)**
 - `cout` -> `flow`
-- `cin` -> `source` ❌
 
 **Repetition**
 - `while` -> `cycle`
-- `break` -> `clog` ❌
-- `continue` -> `flush` ❌
+- `break` -> `clog` 
+- `continue` -> `flush` 
 
 **Function**
 - `def` -> `faucet` 
@@ -31,11 +30,49 @@ This project made for final project on Programming Languages.</p>
 - `true` 
 - `false` 
 - `null` 
-
+- `and`
+- `or`
 ---
 
 ### Compile
-To change the algorithm file, edit `source.mpipe`
+To make changes edit `source.mpipe`
+```bash
+faucet loop_test()
+{
+    sealed test = 1;
+    tap step = 0;
+    cycle(step < 5)
+    {
+        step = step + 1;  // you can only add number this way
+        pipe(step == 2)
+        {
+            flush;
+        }
+        branch(step == 4){
+            clog;
+        }
+        flow("Interation" , step);
+    }
+}
+faucet else_if_return_test(x, y) 
+{
+    pipe(x > y) 
+    {
+        spill x - y;
+    } 
+    branch (x == y) 
+    { 
+        spill x * y;
+    } 
+    drain 
+    {
+        spill;
+    }
+}
+flow();
+loop_test() // when calling faucet function no semi colon
+flow(else_if_return_test(5,5));
+```
 
 To compile all Java files into the `out` folder:
 ```bash

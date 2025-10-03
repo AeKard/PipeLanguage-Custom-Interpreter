@@ -34,7 +34,7 @@ public class VarDecleration extends Stms{
         String pad = " ".repeat(indent + 2);
         StringBuilder sb = new StringBuilder();
 
-        sb.append("\n" + pad).append("kind: VarDecleration\n");
+        sb.append("\n" + pad).append("KIND: VarDecleration\n");
         sb.append(pad).append("Identifier: " + this.identifier + "\n" );
         sb.append(pad).append("Constant:" + this.constant+ "\n");
         sb.append(pad).append("value: ").append((this.value == null)? "Null" : "\n" + this.value.toString(indent + 2));

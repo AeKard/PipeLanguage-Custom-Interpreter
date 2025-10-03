@@ -24,7 +24,7 @@ public class PrintStm extends Stms{
         String pad = " ".repeat(indent + 2);
         StringBuilder sb = new StringBuilder();
 
-        sb.append("\n" + pad).append("kind: Print\n");
+        sb.append("\n" + pad).append("KIND: Print\n");
         sb.append(pad).append("Expressions:\n");
         for (Expr expr : expression) {
             sb.append(expr.toString(indent + 2)).append("\n");

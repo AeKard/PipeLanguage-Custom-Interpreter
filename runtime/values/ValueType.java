@@ -7,5 +7,7 @@ public enum ValueType{
     Boolean,
     Function,
     ReturnVal,
+    BreakVal,
+    ContinueVal
 };
 

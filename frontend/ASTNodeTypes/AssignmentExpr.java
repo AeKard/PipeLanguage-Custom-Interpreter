@@ -10,24 +10,16 @@ public class AssignmentExpr extends Expr{
         this.value = value;
     }
 
-    public NodeType getType(){
-        return this.kind;
-    }
-    public Expr getAssigneExpr(){
-        return this.assigne;
-    }
-    public Expr getValueExpr(){
-        return this.value;
-    }
-    public String getValue(){
-        return "AssignemntExpr Does not return a String Value";
-    }
+    public NodeType getType(){return this.kind;}
+    public Expr getAssigneExpr(){return this.assigne;}
+    public Expr getValueExpr(){return this.value;}
+    public String getValue(){return "AssignemntExpr Does not return a String Value";}
     @Override
     public String toString(int indent) {
         String pad = " ".repeat(indent + 2);
         StringBuilder sb = new StringBuilder();
 
-        sb.append("\n" + pad).append("kind: AssignmentExpr\n");
+        sb.append("\n" + pad).append("KIND: AssignmentExpr\n");
         sb.append(pad).append("value:\n");
 
         sb.append(pad).append("  assigne:").append("\n")

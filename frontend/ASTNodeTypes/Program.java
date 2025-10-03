@@ -23,6 +23,7 @@ public class Program extends Stms{
     public String toString(int indent) {
         String pad = " ".repeat(indent + 2);
         StringBuilder sb = new StringBuilder();
+        sb.append(pad).append("AST Tree Representation \n\n");
         sb.append(pad).append("Program:\n");
 
         for (Stms stm : body) {

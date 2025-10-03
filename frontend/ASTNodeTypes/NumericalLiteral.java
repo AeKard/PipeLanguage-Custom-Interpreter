@@ -22,7 +22,7 @@ public class NumericalLiteral extends Expr { // Inherit from expression
         String pad = " ".repeat(indent + 4);
         StringBuilder sb = new StringBuilder();
 
-        sb.append(pad).append("kind: NumericalLiteral\n");
+        sb.append(pad).append("KIND: NumericalLiteral\n");
         sb.append(pad).append("value: ").append(this.symbol);
 
         return sb.toString();

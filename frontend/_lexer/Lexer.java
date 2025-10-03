@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Arrays;
 
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Lexer {
     String src;
@@ -22,20 +21,24 @@ public class Lexer {
         
         List<TokenRule> rules = Arrays.asList(
             new TokenRule(TokenTypes.Const, "^\\bsealed\\b"),
+            // new TokenRule(TokenTypes.UserInput, "^\\bsource\\b"),
             new TokenRule(TokenTypes.WhileStm, "^\\bcycle\\b"),
             new TokenRule(TokenTypes.Fn, "^\\bfaucet\\b"),
             new TokenRule(TokenTypes.ReturnStm, "^\\bspill\\b"),
+            new TokenRule(TokenTypes.ContinueStm, "\\bflush\\b"),
+            new TokenRule(TokenTypes.ReturnStm, "\\bclog\\b"),
+            new TokenRule(TokenTypes.LogicOp, "\\b(and|or)\\b"),
             new TokenRule(TokenTypes.Let, "^\\btap\\b"),
             new TokenRule(TokenTypes.IfStm, "^\\bpipe\\b"),
             new TokenRule(TokenTypes.ElseIfStm, "^\\bbranch\\b"),
             new TokenRule(TokenTypes.ElseStm, "^\\bdrain\\b"),
             new TokenRule(TokenTypes.SemiColon, "^;"),
             new TokenRule(TokenTypes.Print, "^\\bflow\\b"),
+            new TokenRule(TokenTypes.Number, "^[0-9]+(\\.[0-9]+)?"),
             new TokenRule(TokenTypes.Identifier, "^[A-Za-z_][A-Za-z0-9_]*"),
             new TokenRule(TokenTypes.Comma, "^,"),
             new TokenRule(TokenTypes.StringLiteral, "^\"[^\"]*\""),
             new TokenRule(TokenTypes.StringLiteral, "^'[^']*'"),
-            new TokenRule(TokenTypes.Number, "^[0-9]+(\\.[0-9]+)?"),
             new TokenRule(TokenTypes.BinaryOperator, "^(\\+|\\-|\\*|%|/)"),
             new TokenRule(TokenTypes.ComparisonOperator,"^(!=|<=|>=|>|<|==)"),
             new TokenRule(TokenTypes.OpenParen, "^\\("),
@@ -51,10 +54,21 @@ public class Lexer {
 
         while(!input.isEmpty()){
             boolean matched = false;
+
+            if (input.startsWith("//")) {
+                int newlineIndex = input.indexOf("\n");
+                if (newlineIndex == -1) {
+                    break;
+                } else {
+                    input = input.substring(newlineIndex + 1);
+                    continue; 
+                }
+            }
+
+
             for(TokenRule rule : rules){
                 Matcher matcher = rule.pattern.matcher(input);
-                // System.out.println(matcher);
-
+                
                 if(matcher.lookingAt()){
                     String value = matcher.group();
                     tokens.add(new Token(value, rule.type));
@@ -68,6 +82,7 @@ public class Lexer {
                 input = input.substring(1);
             }
         }
+        
         
         tokens.add(new Token("EOF", TokenTypes.EOF));
         return tokens;

@@ -25,7 +25,7 @@ public class BinaryExpr extends Expr { // Inherit from expression
         String childPad = " ".repeat(indent + 4 * 2);
         StringBuilder sb = new StringBuilder();
 
-        sb.append( pad).append("kind: BinaryExpr\n");
+        sb.append( pad).append("KIND: BinaryExpr\n");
 
         sb.append(pad).append("  left:\n");
         sb.append(left.toString(indent + 4)).append("\n");

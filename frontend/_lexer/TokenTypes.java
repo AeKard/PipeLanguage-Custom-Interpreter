@@ -15,7 +15,10 @@ public enum TokenTypes{
     ElseStm, //drain
 
     WhileStm, //cycle
+    BreakStm,
+    ContinueStm,
 
+    LogicOp,
     BinaryOperator,
     ComparisonOperator,
     NotEqual,
@@ -36,6 +39,6 @@ public enum TokenTypes{
     OpenBrace,
     CloseBrace,
 
-    Comments,
+    UserInput,
     EOF,
 };

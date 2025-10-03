@@ -4,7 +4,6 @@ import java.util.List;
 import frontend.ASTNodeTypes.BlockStms;
 import runtime.Environement;
 
-// TODO: when a value 
 public class FunctionVal extends RuntimeVal{
     String name;
     List<String> param;

@@ -1,35 +1,27 @@
-faucet func(x, y){
-    tap sum = x + y;
-    spill sum;
-}
-
-sealed name = "Lord Drake" + "B";
-tap age = 22;
-tap codingLevel = 0;
-tap test = codingLevel;
-tap help = true;
-flow("My name is", name , "my age is", age , "and next year is", age + 1);
-
-cycle (codingLevel < 5){
-    flow("codingLevel :", codingLevel);
-    codingLevel = codingLevel + 1;
-}
-
-pipe (age >= 18){
-    flow("Eligable to vote");
-    pipe(codingLevel == 0){
-        flow(test);
-        flow("Coding level is", codingLevel);
-        pipe(help){
-            flow("Multiple complex math random:", codingLevel * age +(10 + 1 / 5 + (age / 2)));
+faucet loop_test(){ 
+    sealed test = 1;
+    tap step = 0;
+    cycle(step < 5){
+        step = step + 1; // you can only add number this way
+        pipe(step == 2)
+        {
+            flush;
         }
-    }branch(codingLevel == 1){
-        flow("Coding level is 1");
-    }drain{
-        flow("I dont know your level");
+        branch(step == 4){
+            clog;
+        }
+    flow("Interation" , step);
+    }
 }
-}drain{
-    flow("not Eligable to vote");
+faucet else_if_return_test(x, y) {
+    pipe(x > y) {
+        spill x - y;
+    } branch (x == y) { 
+        spill x * y;
+    } drain {
+        spill;
+    }
 }
-
-flow(func(1, 2));
+flow();
+loop_test() // when calling faucet function no semi colon
+flow(else_if_return_test(5,5));

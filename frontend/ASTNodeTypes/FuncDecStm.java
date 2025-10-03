@@ -21,6 +21,14 @@ public class FuncDecStm extends Expr {
 
     @Override
     public String toString(int indent){
-        return "FuncDecleration";
+        String pad = " ".repeat(indent + 2);
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("\n" + pad).append("KIND: Function Decleration \n");
+        sb.append(pad).append("Function Name: " + this.name + "\n");
+        sb.append(pad).append("Params: <").append(String.join(" ",this.params)).append(">\n");
+        sb.append(pad).append("value:").append(this.body.toString(indent));
+
+        return sb.toString();
     }
 }
