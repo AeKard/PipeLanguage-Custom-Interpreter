@@ -35,7 +35,7 @@ This project made for final project on Programming Languages.</p>
 ---
 
 ### Interpreter Diagram
-<img src="./img/level1.png" alt="Interpreter Diagram" width="400">
+<img src="./img/level1.png" alt="Interpreter Diagram" width="800">
 
 
 ### Compile
