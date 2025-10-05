@@ -34,6 +34,10 @@ This project made for final project on Programming Languages.</p>
 - `or`
 ---
 
+### Interpreter Diagram
+<img src="./img/level1.png" alt="Interpreter Diagram" width="400">
+
+
 ### Compile
 To make changes edit `source.mpipe`
 ```bash
@@ -74,7 +78,7 @@ loop_test() // when calling faucet function no semi colon
 flow(else_if_return_test(5,5));
 ```
 
-To compile all Java files into the `out` folder:
+Compile all Java files into the `out` folder:
 ```bash
 javac -d out *.java
 ```
