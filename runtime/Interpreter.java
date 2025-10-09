@@ -12,7 +12,7 @@ public class Interpreter{
         this.Exp = new Expression(this);
     }
     // Create a Null Class
-    public NullVal MKNULL(){return new NullVal("aaNull");}
+    public NullVal MKNULL(){return new NullVal("Place holder Null");}
 
     // Evaluate the program statement
     private RuntimeVal eval_prog(Program program, Environement env){

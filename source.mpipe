@@ -7,9 +7,11 @@ faucet loop_test()
         step = step + 1;  // you can only add number this way
         pipe(step == 2)
         {
+            flow("use flush 'continue'");
             flush;
         }
         branch(step == 4){
+            flow("use clog 'break'");
             clog;
         }
         flow("Interation" , step);
@@ -23,16 +25,13 @@ faucet else_if_return_test(x, y)
     } 
     branch (x == y) 
     { 
+        spill x * y;
     } 
     drain 
     {
         spill;
     }
-    spill;
-}
-faucet testblock(){
 }
 flow();
 loop_test() // when calling faucet function no semi colon
-flow(else_if_return_test(4,5));
-flow(testblock);
+flow(else_if_return_test(5,5));

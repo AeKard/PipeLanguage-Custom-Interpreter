@@ -52,24 +52,37 @@ public class Lexer {
         return Pattern.compile(sb.toString());
     }
     public ArrayList<Token> Tokenizer() {
-    ArrayList<Token> tokens = new ArrayList<>();
-    Matcher matcher = COMBINED_PATTERN.matcher(src);
+        ArrayList<Token> tokens = new ArrayList<>();
+        Matcher matcher = COMBINED_PATTERN.matcher(src);
+        // Checks for valid tokens "add it into the token array "return token array""
+        while (matcher.find()) {
+            boolean isComment = false;
 
-    while (matcher.find()) {
-        for (TokenRule rule : rules) {
-            String value = matcher.group(rule.type.name());
-            if (value != null) {
-                if (rule.type != TokenTypes.Comment) { // skip comment tokens
+            for (TokenRule rule : rules) {
+                String value = matcher.group(rule.type.toString());
+                if (value != null) {
+
+                    if (rule.type == TokenTypes.Comment) {
+                        int nextLine = src.indexOf('\n', matcher.end());
+                        if (nextLine == -1) {
+                            return tokens;
+                        }
+                        matcher.region(nextLine + 1, src.length());
+                        isComment = true;
+                        break;
+                    }
+                    System.out.println(rule.type + "(" + value + ")");
                     tokens.add(new Token(value, rule.type));
+                    break;
                 }
-                break;
             }
-        }
-    }
 
-    tokens.add(new Token("EOF", TokenTypes.EOF));
-    return tokens;
-}
+            if (isComment) continue;
+        }  
+        // EOF for end of line
+        tokens.add(new Token("EOF", TokenTypes.EOF));
+        return tokens;
+    }   
 
 }
 

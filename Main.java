@@ -25,12 +25,14 @@ public class Main {
         env.declareVar("null", new NullVal(null), true);
     }
     private static void useSourceFile(Interpreter Interp, Parser parse, Environement env, String path){
-        System.out.print("\tFileMode \n\n");
         try {
             String source = Files.readString(Paths.get(path));
+
+            System.out.println(" \n---- TOKEN TYPES ----\n");
             Program prog = parse.produceAST(source);
+            System.out.println(" \n---- AST Tree Representation ----\n");
             System.out.println(prog);
-            System.out.println(" ---- Terminal Printing ----");
+            System.out.println(" \n---- CLI Evaluated ----\n");
             Interp.evaluate(prog, env);
         } catch (IOException e) {
             System.out.println("File Error :" + e);

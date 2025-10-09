@@ -37,7 +37,7 @@ public class Statement {
 
         for (Expr expr : pstm.getValue()) {
             RuntimeVal val = Inter.evaluate(expr, env);
-            outputs.add((val.toString() == null) ? "Null": val.toString());
+            outputs.add(String.valueOf(val));
         }
         System.out.println(String.join(" ", outputs));
 
@@ -99,7 +99,7 @@ public class Statement {
         }   
         return last;
     }
-
+    // Evaluate fn Call
     public RuntimeVal evalFnCall(FuncCallStm call, Environement env){
         RuntimeVal fnVal = Inter.evaluate(call.getCallee(), env);
 
