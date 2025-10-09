@@ -19,9 +19,46 @@ public class Lexer {
     public ArrayList<Token> Tokenizer(){
         ArrayList<Token> tokens = new ArrayList<>();
         
+        String input = src;        
+        while(!input.isEmpty()){
+            boolean matched = false;
+            
+            if (input.startsWith("//")) {
+                int newlineIndex = input.indexOf("\n");
+                if (newlineIndex == -1) {
+                    break;
+                } else {
+                    input = input.substring(newlineIndex + 1);
+                    continue; 
+                }
+            }
+            System.out.println(input);
+            
+            for(TokenRule rule : this.rules()){
+                Matcher matcher = rule.pattern.matcher(input);
+                
+                if(matcher.lookingAt()){
+                    String value = matcher.group();
+                    tokens.add(new Token(value, rule.type));
+                    input = input.substring(matcher.end());
+                    matched = true;
+                    break;
+                }
+            }
+            if(!matched){
+                // IGNORE SPACES FOR NOW OR SOMETHING UNKNOWS IGNORE
+                input = input.substring(1);
+            }
+        }
+        
+        
+        tokens.add(new Token("EOF", TokenTypes.EOF));
+        return tokens;
+    }
+    private List<TokenRule> rules(){
+        
         List<TokenRule> rules = Arrays.asList(
             new TokenRule(TokenTypes.Const, "^\\bsealed\\b"),
-            // new TokenRule(TokenTypes.UserInput, "^\\bsource\\b"),
             new TokenRule(TokenTypes.WhileStm, "^\\bcycle\\b"),
             new TokenRule(TokenTypes.Fn, "^\\bfaucet\\b"),
             new TokenRule(TokenTypes.ReturnStm, "^\\bspill\\b"),
@@ -46,46 +83,9 @@ public class Lexer {
             new TokenRule(TokenTypes.Equals, "^="),
             new TokenRule(TokenTypes.OpenBrace,"^\\{"),
             new TokenRule(TokenTypes.CloseBrace,"^\\}")
-            
-            // new TokenRule(TokenTypes.OpenBracket,"^\\["),
-            // new TokenRule(TokenTypes.CloseBracket,"^\\]"),
         );
-        String input = src;
-
-        while(!input.isEmpty()){
-            boolean matched = false;
-
-            if (input.startsWith("//")) {
-                int newlineIndex = input.indexOf("\n");
-                if (newlineIndex == -1) {
-                    break;
-                } else {
-                    input = input.substring(newlineIndex + 1);
-                    continue; 
-                }
-            }
-
-
-            for(TokenRule rule : rules){
-                Matcher matcher = rule.pattern.matcher(input);
-                
-                if(matcher.lookingAt()){
-                    String value = matcher.group();
-                    tokens.add(new Token(value, rule.type));
-                    input = input.substring(matcher.end());
-                    matched = true;
-                    break;
-                }
-            }
-            if(!matched){
-                // IGNORE SPACES FOR NOW OR SOMETHING UNKNOWS IGNORE
-                input = input.substring(1);
-            }
-        }
         
-        
-        tokens.add(new Token("EOF", TokenTypes.EOF));
-        return tokens;
+        return rules;
     }
 }
 
