@@ -9,4 +9,8 @@ public class TokenRule {
         this.type = type;
         this.pattern = Pattern.compile(regex);
     }
+    @Override
+    public String toString(){
+        return this.type + "("+this.pattern+")";
+    }
 }

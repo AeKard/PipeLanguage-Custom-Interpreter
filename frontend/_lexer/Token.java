@@ -11,4 +11,8 @@ public class Token{
 
     public TokenTypes getTokenType(){return type;}
     public String getValue(){return value;}
+    @Override
+    public String toString(){
+        return this.type + " (\'"+this.value+"\')\n";
+    }
 };

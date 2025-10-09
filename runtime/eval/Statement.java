@@ -75,7 +75,7 @@ public class Statement {
         }
         return Inter.MKNULL();
     }
-    
+    // Evaluate while statement
     public RuntimeVal evalWhile(WhileStm whStms, Environement env){
         RuntimeVal last = Inter.MKNULL();
         while (true) {
@@ -92,8 +92,7 @@ public class Statement {
             }
             RuntimeVal result = Inter.evaluate(whStms.getBody(), env);
 
-            if(result instanceof BreakVal){
-                break;}
+            if(result instanceof BreakVal){break;}
             else if(result instanceof ContinueVal){continue;}
             else if(result instanceof ReturnVal){return result;}
             last = result;
@@ -118,7 +117,6 @@ public class Statement {
             }
 
             RuntimeVal result = Inter.evaluate(fn.getBody(), localEnv);
-
             if (result instanceof ReturnVal) {
                 return ((ReturnVal) result).getValue();
             }

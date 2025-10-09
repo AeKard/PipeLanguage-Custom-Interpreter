@@ -21,4 +21,9 @@ public class FunctionVal extends RuntimeVal{
     public List<String> getParam(){return this.param;}
     public BlockStms getBody(){return this.body;}
     public String getName(){return this.name;}
+
+    @Override
+    public String toString(){
+        return "Expect open and close paren for function call ()";
+    }
 }

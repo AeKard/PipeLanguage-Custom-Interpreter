@@ -39,6 +39,6 @@ public enum TokenTypes{
     OpenBrace,
     CloseBrace,
 
-    UserInput,
+    Comment,
     EOF,
 };

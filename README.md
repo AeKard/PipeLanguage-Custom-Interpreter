@@ -39,7 +39,9 @@ This project made for final project on Programming Languages.</p>
 
 
 ### Compile
-To make changes edit `source.mpipe`
+To make changes edit `source.mpipe` 
+
+**Sample Code**
 ```bash
 faucet loop_test()
 {

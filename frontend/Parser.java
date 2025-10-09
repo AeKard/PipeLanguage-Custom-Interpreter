@@ -44,7 +44,7 @@ public class Parser {
     public Program produceAST(String src){
         Lexer lex = new Lexer(src);
         this.tokens = lex.Tokenizer();
-
+        System.out.println(this.tokens);
         Program program = new Program(new ArrayList<>());
         
         while (this.not_eof()) {

@@ -1,8 +1,10 @@
-faucet loop_test(){ 
+faucet loop_test()
+{
     sealed test = 1;
     tap step = 0;
-    cycle(step < 5){
-        step = step + 1; // you can only add number this way
+    cycle(step < 5)
+    {
+        step = step + 1;  // you can only add number this way
         pipe(step == 2)
         {
             flush;
@@ -10,18 +12,27 @@ faucet loop_test(){
         branch(step == 4){
             clog;
         }
-    flow("Interation" , step);
+        flow("Interation" , step);
     }
 }
-faucet else_if_return_test(x, y) {
-    pipe(x > y) {
+faucet else_if_return_test(x, y) 
+{
+    pipe(x > y) 
+    {
         spill x - y;
-    } branch (x == y) { 
-        spill x * y;
-    } drain {
+    } 
+    branch (x == y) 
+    { 
+    } 
+    drain 
+    {
         spill;
     }
+    spill;
+}
+faucet testblock(){
 }
 flow();
 loop_test() // when calling faucet function no semi colon
-flow(else_if_return_test(5,5));
+flow(else_if_return_test(4,5));
+flow(testblock);

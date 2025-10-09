@@ -3,7 +3,7 @@ package frontend.ASTNodeTypes;
 import java.util.ArrayList;
 // di this
 public class BlockStms extends Stms{
-    public ArrayList<Stms> body;
+    ArrayList<Stms> body;
 
     public BlockStms(ArrayList<Stms> body){
         super(NodeType.Block);

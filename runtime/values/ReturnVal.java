@@ -11,4 +11,8 @@ public class ReturnVal extends RuntimeVal{
     public RuntimeVal getValue(){
         return value;
     }
+    @Override
+    public String toString(){
+        return ""+this.value;
+    }
 }
