@@ -3,7 +3,6 @@ package frontend;
 import frontend.ASTNodeTypes.*;
 import frontend._lexer.Token;
 import frontend._lexer.TokenTypes;
-import frontend._lexer.Lexer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,17 +16,19 @@ public class Parser {
     }
     //Check current token
     private Token at(){return this.tokens.get(0);}
+
     //Remove Token
     private Token eat(){
         Token prev = tokens.removeFirst();
         return prev;
     }
+
     //Check for Expected Token type
     private Token expect(TokenTypes tk, String err){
         // System.out.println(this.tokens.size() + "|" + this.at().getValue() + err);
         Token prev = this.tokens.removeFirst(); 
         if(prev == null|| prev.getValue().isEmpty() || prev.getTokenType() != tk){
-            System.out.println("Parser Error:\n"+ " " + err + " " + prev.getValue() + " - Expecting: "+ tk);
+            System.out.println("Parse Error | Line : "+ prev.getLine() + " " + err + " on '" + prev.getValue() + "' - Expecting: "+ tk);
             System.exit(0);
         }
         return prev;
@@ -41,9 +42,8 @@ public class Parser {
         return false;
     }
     //Produce the Abstract Syntax Tree
-    public Program produceAST(String src){
-        Lexer lex = new Lexer(src);
-        this.tokens = lex.Tokenizer();
+    public Program produceAST(ArrayList<Token> tokens){
+        this.tokens = tokens;
         
         Program program = new Program(new ArrayList<>());
         
@@ -80,18 +80,18 @@ public class Parser {
     //Parse Continue
     private Stms parse_continue_Stms(){
         this.eat();
-        this.expect(TokenTypes.SemiColon, "Expect ; at the end of flush");
+        this.expect(TokenTypes.SemiColon, "Expect ';' at the end of flush");
         return new ContinueStm();
     }
     private Stms parse_break_Stms(){
         this.eat();
-        this.expect(TokenTypes.SemiColon, "Expect ; at the end of clog");
+        this.expect(TokenTypes.SemiColon, "Expect ';' at the end of clog");
         return new BreakStm();
     }
     //Parse Print statement and its rules
     private Stms parse_print_Stms(){
         this.eat();
-        this.expect(TokenTypes.OpenParen, "Expect \"(\" befor print arguments");
+        this.expect(TokenTypes.OpenParen, "Expect '(' befor print arguments");
 
         List<Expr> args = new ArrayList<>();
 
@@ -103,30 +103,30 @@ public class Parser {
                 args.add(this.parse_Expr());
             }
         }
-        this.expect(TokenTypes.CloseParen, "Expected ')' after print arguments");
-        this.expect(TokenTypes.SemiColon, "Missing semicolon after print statement");
+        this.expect(TokenTypes.CloseParen, "Expected ')' after print arguments.");
+        this.expect(TokenTypes.SemiColon, "Missing semicolon after print statement.");
 
         return new PrintStm(args);
     }
     //Parse Var Decleration
     private Stms parse_var_decleration(){
         boolean isConstant = this.eat().getTokenType() == TokenTypes.Const;
-        String identifier = this.expect(TokenTypes.Identifier, "Expected Identifier | \"tap\" keyword").getValue();
+        String identifier = this.expect(TokenTypes.Identifier, "Expected 'Identifier'").getValue();
 
         if(this.at().getTokenType() == TokenTypes.SemiColon){
             this.eat();
             if(isConstant){
-                System.out.println("Must assigne value to constant expression. No value provided.");
+                System.out.println("Must assigne value to constant expression. No value provided");
                 System.exit(0);
             }
             return new VarDecleration(false, identifier);
         }
 
-        this.expect(TokenTypes.Equals, "Expect equals token following identifier in var declaration.");
+        this.expect(TokenTypes.Equals, "Expect equals token following identifier in var declaration");
 
         VarDecleration declaration = new VarDecleration(isConstant, identifier, this.parse_Expr());
 
-        this.expect(TokenTypes.SemiColon, "Variable declaration statment must end with semicolon.");
+        this.expect(TokenTypes.SemiColon, "Variable declaration statment must end with semicolon");
 
         return declaration;
     }   
@@ -141,28 +141,28 @@ public class Parser {
     }
     //parse block statement
     private Stms parse_block(){
-        this.expect(TokenTypes.OpenBrace, "Expect \"{\" to start block");
+        this.expect(TokenTypes.OpenBrace, "Expect '{' to start block");
         ArrayList<Stms> body = new ArrayList<>();
         
         while (this.at().getTokenType() != TokenTypes.CloseBrace) {
             body.add(parse_Stms());
         }
         // System.out.println(this.at().getTokenType());
-        this.expect(TokenTypes.CloseBrace, "Expect \"}\" to end block");
+        this.expect(TokenTypes.CloseBrace, "Expect '}' to end block");
         return new BlockStms(body);
     }
     //parse FunctionDec Statement
     private Stms parse_function_dec(){
-        this.expect(TokenTypes.Fn, "Expects \"faucet\" in variable decleration");
-        String name = this.expect(TokenTypes.Identifier, "Expects \"function name\"").getValue();
-        this.expect(TokenTypes.OpenParen, "Expected '(' after function name");
+        this.expect(TokenTypes.Fn, "Expected 'faucet' in function decleration");
+        String name = this.expect(TokenTypes.Identifier, "Expected 'function name'").getValue();
+        this.expect(TokenTypes.OpenParen, "Expected '(' after function decleration");
         List<String> params = new ArrayList<>();
         if(this.at().getTokenType() != TokenTypes.CloseParen){
             do {
-                params.add(this.expect(TokenTypes.Identifier, "Expect parameter name").getValue());
+                params.add(this.expect(TokenTypes.Identifier, "Expected parameter names").getValue());
             } while (this.match(TokenTypes.Comma));
         }
-        this.expect(TokenTypes.CloseParen, "Expect \")\" after parameterse");
+        this.expect(TokenTypes.CloseParen, "Expected ')' after parameters");
         BlockStms body = (BlockStms) parse_block();
 
         return new FuncDecStm(name, params, body);
@@ -181,12 +181,12 @@ public class Parser {
     }
     //parse Return Statment
     private Stms parse_return_Stm(){
-        this.expect(TokenTypes.ReturnStm, "Expect \"spill\" Keyword");
+        this.expect(TokenTypes.ReturnStm, "Expected 'spill' Keyword");
         Expr value = null;
         if(this.at().getTokenType() != TokenTypes.SemiColon){
             value = this.parse_Expr();
         } 
-        this.expect(TokenTypes.SemiColon, "Expect \";\" after return value");
+        this.expect(TokenTypes.SemiColon, "Expected ';' after return value");
         return new ReturnStm(value);
     }
     //Parse While Statement
@@ -245,7 +245,7 @@ public class Parser {
         if(this.at().getTokenType() == TokenTypes.Equals){
             this.eat();
             Expr value = this.parse_assignment_expr();
-            this.expect(TokenTypes.SemiColon, "Variable declaration statment must end with semicolon. ");
+            this.expect(TokenTypes.SemiColon, "Variable declaration statment must end with semicolon");
             return new AssignmentExpr(left, value);
         }
         return left;
@@ -307,10 +307,10 @@ public class Parser {
             case TokenTypes.OpenParen:
                 this.eat();
                 Expr value = this.parse_Expr();
-                this.expect(TokenTypes.CloseParen, "\"Unexpected token found inside parenthesised expression. Expected closing parenthesis.\",");
+                this.expect(TokenTypes.CloseParen, "Line : "+this.at().getLine()+" Unexpected token found inside parenthesised expression. Expected closing parenthesis.,");
                 return value;
             default:
-                System.out.println("Unexpected token found during parsing! : " + this.at().getValue());
+                System.out.println("Line : "+this.at().getLine()+" Unexpected token found during parsing! : " + this.at().getValue());
                 System.exit(0);
                 return new Identifier("");
         }

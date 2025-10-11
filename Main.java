@@ -1,53 +1,58 @@
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-// import java.util.Scanner;
 
 import runtime.values.BooleanVal;
 import runtime.values.NullVal;
-
 import runtime.Interpreter;
 import runtime.Environement;
-import frontend.ASTNodeTypes.Program;
 
+import frontend.ASTNodeTypes.Program;
+import frontend._lexer.Lexer;
 import frontend.Parser;
 
-import java.nio.file.Paths;
-
-/*
- * TODO: Use stream for comparison on lexer 
- */
 public class Main {
 
-    private static void declaredWord(Environement env){
-        env.declareVar("true", new BooleanVal(true), true);
-        env.declareVar("false", new BooleanVal(false), true);
-        env.declareVar("null", new NullVal(null), true);
+    private static void declareBuiltins(Environement env) {
+        env.declareReserveKeyword("true", new BooleanVal(true), true);
+        env.declareReserveKeyword("false", new BooleanVal(false), true);
+        env.declareReserveKeyword("null", new NullVal(null), true);
     }
-    private static void useSourceFile(Interpreter Interp, Parser parse, Environement env, String path){
-        try {
-            String source = Files.readString(Paths.get(path));
 
-            System.out.println(" \n---- TOKEN TYPES ----\n");
-            Program prog = parse.produceAST(source);
-            System.out.println(" \n---- AST Tree Representation ----\n");
-            System.out.println(prog);
-            System.out.println(" \n---- CLI Evaluated ----\n");
-            Interp.evaluate(prog, env);
-        } catch (IOException e) {
-            System.out.println("File Error :" + e);
-            System.exit(0);
-        }
-        return;
-    }
-    public static void main(String[] args) {
-        Interpreter Interp = new Interpreter();
-        Parser parse = new Parser();
+    private static void runSourceFile(String path) {
+        System.out.println("=== Running Pipe Language ===");
+
         Environement env = new Environement(null);
-        
-        String path = "source.mpipe";
-        System.out.println(" === Programming language ===");
-        declaredWord(env);
-        useSourceFile(Interp, parse, env, path);
-    }    
+        declareBuiltins(env);
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+            Lexer lexer = new Lexer(reader);
+            Parser parser = new Parser();
+            Interpreter interpreter = new Interpreter();
+
+            System.out.println("\n---- TOKEN TYPES ----\n");
+            var tokens = lexer.Tokenizer();
+
+            System.out.println("\n---- AST Tree Representation ----\n");
+            Program program = parser.produceAST(tokens);
+            System.out.println(program);
+
+            System.out.println("\n---- CLI Evaluation ----\n");
+            interpreter.evaluate(program, env);
+
+        } catch (IOException e) {
+            System.err.println("Error reading file: " + e.getMessage());
+            System.exit(1);
+        } catch (Exception e) {
+            System.err.println("Interpreter Error: " + e.getMessage());
+            e.printStackTrace();
+            System.exit(2);
+        }
+    }
+
+    public static void main(String[] args) {
+        String path = (args.length > 0) ? args[0] : "source.mpipe";
+        runSourceFile(path);
+    }
 }

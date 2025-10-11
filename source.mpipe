@@ -7,11 +7,9 @@ faucet loop_test()
         step = step + 1;  // you can only add number this way
         pipe(step == 2)
         {
-            flow("use flush 'continue'");
             flush;
         }
         branch(step == 4){
-            flow("use clog 'break'");
             clog;
         }
         flow("Interation" , step);

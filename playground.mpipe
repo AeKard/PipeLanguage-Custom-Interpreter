@@ -1,0 +1,16 @@
+// Create a function that could return a multiplication 
+// without using * multiplicative 
+
+faucet multiply(a, b)
+{
+    tap result = 0;
+    cycle(b > 0)
+    {
+        result = result + a;
+         b=b - 1;
+    }
+    spill result;
+}
+tap test;
+flow(true);
+flow(multiply(3, 4));

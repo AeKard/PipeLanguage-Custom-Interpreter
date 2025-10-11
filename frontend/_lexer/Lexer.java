@@ -1,15 +1,16 @@
 
 package frontend._lexer;
 
+import java.io.BufferedReader;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Lexer {
-    private String src;
+    private ArrayList<String> src;
     private final List<TokenRule> rules = Arrays.asList(
         new TokenRule(TokenTypes.Comment, "//[^\n]*"),
         new TokenRule(TokenTypes.Const, "\\bsealed\\b"),
@@ -38,10 +39,40 @@ public class Lexer {
         new TokenRule(TokenTypes.CloseBrace,"\\}")
     );
     private final Pattern COMBINED_PATTERN = build_combined_pattern(rules);
-    
-    public Lexer(String src){
-        this.src = src;
+
+    public Lexer(BufferedReader src){
+        this.src = build_String(src);
     }
+    
+    public ArrayList<Token> Tokenizer() {
+        ArrayList<Token> tokens = new ArrayList<>();
+        int line = 1;
+        for (String currentLine : src) {
+            Matcher matcher = COMBINED_PATTERN.matcher(currentLine);
+            while (matcher.find()) {
+                boolean isComment = false;
+                for (TokenRule rule : rules) {
+                    String value = matcher.group(rule.type.toString());
+                    if (value != null) {
+                        if (rule.type == TokenTypes.Comment) {
+                            isComment = true;
+                            break;
+                        }
+
+                        System.out.println("Line :" + line +" | "+ rule.type + "(" + value + ")");
+                        tokens.add(new Token(value, rule.type, line));
+                        break;
+                    }
+                }
+                if (isComment) break;
+            }
+            line++;
+        }
+
+        // EOF token
+        tokens.add(new Token("EOF", TokenTypes.EOF, line));
+        return tokens;
+    }   
     private static Pattern build_combined_pattern(List<TokenRule> rules){
         StringBuilder sb = new StringBuilder();
         for(int i = 0; i < rules.size(); i++){
@@ -51,38 +82,18 @@ public class Lexer {
         }
         return Pattern.compile(sb.toString());
     }
-    public ArrayList<Token> Tokenizer() {
-        ArrayList<Token> tokens = new ArrayList<>();
-        Matcher matcher = COMBINED_PATTERN.matcher(src);
-        // Checks for valid tokens "add it into the token array "return token array""
-        while (matcher.find()) {
-            boolean isComment = false;
-
-            for (TokenRule rule : rules) {
-                String value = matcher.group(rule.type.toString());
-                if (value != null) {
-
-                    if (rule.type == TokenTypes.Comment) {
-                        int nextLine = src.indexOf('\n', matcher.end());
-                        if (nextLine == -1) {
-                            return tokens;
-                        }
-                        matcher.region(nextLine + 1, src.length());
-                        isComment = true;
-                        break;
-                    }
-                    System.out.println(rule.type + "(" + value + ")");
-                    tokens.add(new Token(value, rule.type));
-                    break;
-                }
+    private static ArrayList<String> build_String(BufferedReader src){
+        ArrayList<String> stringLines = new ArrayList<>();
+        String tmp;
+        try {
+            while((tmp = src.readLine()) != null){
+                stringLines.add(tmp);
             }
-
-            if (isComment) continue;
-        }  
-        // EOF for end of line
-        tokens.add(new Token("EOF", TokenTypes.EOF));
-        return tokens;
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+        
+        return stringLines;
     }   
-
 }
 

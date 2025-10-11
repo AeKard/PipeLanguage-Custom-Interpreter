@@ -11,10 +11,22 @@ public class Environement {
     Environement parent;
     Map<String, RuntimeVal> variables;
     Set<String> constants;
+    Set<String> reserverKeywords = Set.of("true", "false", "null");
     public Environement(Environement env){
         this.parent = env;
         this.variables = new HashMap<>();
         this.constants = new HashSet<>();
+    }
+    public RuntimeVal declareReserveKeyword(String varname,  RuntimeVal value, boolean constant){
+        if(this.variables.containsKey(varname)){
+            System.out.println("Variable : \"" + varname + "\" already decalared.");
+            System.exit(2);
+        };
+        this.variables.put(varname, value);
+        if(constant){
+            this.constants.add(varname);
+        }
+        return value;
     }
     // Check if the variable exist
     public Environement resolve(String varname){
@@ -22,16 +34,21 @@ public class Environement {
             return this;
         }
         if(this.parent == null){
-            System.out.println("Variable does not exit: \""+varname+"\"");
-            System.exit(0);
+            System.out.println("Variable does not exit: \""+varname+"\".");
+            System.exit(2);
         }
         return this.parent.resolve(varname);
     }
     // declare var and evaluate if constant
     public RuntimeVal declareVar(String varname,  RuntimeVal value, boolean constant){
+        if (this.reserverKeywords.contains(varname)){
+            System.out.println("Connot used reserve keyword : " + varname);
+            System.exit(2);
+            // return env.variables.get(varname); 
+        }
         if(this.variables.containsKey(varname)){
-            System.out.println("Variable : \"" + varname + "\" already decalared");
-            System.exit(0);
+            System.out.println("Variable : \"" + varname + "\" already decalared.");
+            System.exit(2);
         };
         this.variables.put(varname, value);
         if(constant){
@@ -42,9 +59,16 @@ public class Environement {
     // Assign value to the var and eval if constant
     public RuntimeVal assignVar(String varname, RuntimeVal value){
         Environement env = this.resolve(varname);
+        if (this.reserverKeywords.contains(varname)){
+            System.out.println("Connot used reserve keyword : " + varname);
+            System.exit(2);
+            // return env.variables.get(varname); 
+        }
+
         if (env.constants.contains(varname)) {
-            System.out.println("Cannot reassign value because it's constant");
-            return env.variables.get(varname); 
+            System.out.println("Cannot reassign value because it's constant.");
+            System.exit(2);
+            // return env.variables.get(varname); 
         }
 
         if (env.variables.containsKey(varname)) {

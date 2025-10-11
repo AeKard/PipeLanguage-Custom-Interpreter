@@ -1,7 +1,7 @@
 # Java Custom Interpreter: PIPE Language
 
 ## Getting Started
-<p>The **PIPE meme language**, a practice programming language interpreter using java
+<p>The **PIPE meme language**, a practice programming language interpreter using java <br>
 This project made for final project on Programming Languages.</p>
 
 ### Reserved Keywords
@@ -85,7 +85,8 @@ Compile all Java files into the `out` folder:
 javac -d out *.java
 ```
 ### Run
-To run the interpreter from `out` folder:
+To run the interpreter from `out` folder. If no target file default to source.mpipe:
 ```bash
 java -cp out Main
+java -cp out Main "filename.mpipe"
 ```
