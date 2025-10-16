@@ -9,7 +9,6 @@ import java.util.List;
 
 public class Parser {
     private ArrayList<Token> tokens = new ArrayList<>();
-
     //Check If End of line
     private boolean not_eof(){ 
         return this.tokens.get(0).getTokenType() != TokenTypes.EOF;
@@ -60,9 +59,9 @@ public class Parser {
             case TokenTypes.Const:
                 return this.parse_var_decleration();
             case TokenTypes.ContinueStm:
-                return parse_continue_Stms();
+                return this.parse_continue_Stms();
                 case TokenTypes.BreakStm:
-                return parse_break_Stms();
+                return this.parse_break_Stms();
             case TokenTypes.Print:
                 return this.parse_print_Stms();
             case TokenTypes.IfStm:
@@ -177,6 +176,8 @@ public class Parser {
             } while (this.match(TokenTypes.Comma));
         }
         this.eat();
+        if (this.at().getTokenType() == TokenTypes.SemiColon) this.eat();
+
         return new FuncCallStm(Callee, args);
     }
     //parse Return Statment

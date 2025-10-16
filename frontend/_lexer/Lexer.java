@@ -60,7 +60,7 @@ public class Lexer {
                         }
 
                         System.out.println("Line :" + line +" | "+ rule.type + "(" + value + ")");
-                        tokens.add(new Token(value, rule.type, line));
+                        tokens.add(new Token(value, rule.type, line)); //
                         break;
                     }
                 }

@@ -43,21 +43,17 @@ To make changes edit `source.mpipe`
 
 **Sample Code**
 ```bash
-faucet loop_test()
+faucet multiplicationTable(l, r)
 {
-    sealed test = 1;
-    tap step = 0;
-    cycle(step < 5)
+    cycle(l < 5)
     {
-        step = step + 1;  // you can only add number this way
-        pipe(step == 2)
-        {
-            flush;
+        r = 0;
+        cycle(r < 5){
+            r = r + 1;
+            flow("l:", l, " * ","r:", r, " = ", l*r);
         }
-        branch(step == 4){
-            clog;
-        }
-        flow("Interation" , step);
+        l = l + 1;
+        flow("l :",l);
     }
 }
 faucet else_if_return_test(x, y) 
@@ -75,8 +71,7 @@ faucet else_if_return_test(x, y)
         spill;
     }
 }
-flow();
-loop_test() // when calling faucet function no semi colon
+multiplicationTable(1,1);
 flow(else_if_return_test(5,5));
 ```
 

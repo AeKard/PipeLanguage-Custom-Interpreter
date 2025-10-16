@@ -1,16 +1,13 @@
-// Create a function that could return a multiplication 
-// without using * multiplicative 
-
-faucet multiply(a, b)
-{
-    tap result = 0;
-    cycle(b > 0)
+faucet multiplicationTable(l, r){
+    cycle(l < 5)
     {
-        result = result + a;
-         b=b - 1;
+        r = 0;
+        cycle(r < 5){
+            r = r + 1;
+            flow("l:", l, " * ","r:", r, " = ", l*r);
+        }
+        l = l + 1;
+        flow("l :",l);
     }
-    spill result;
 }
-tap test;
-flow(true);
-flow(multiply(3, 4));
+multiplicationTable(1,1);
