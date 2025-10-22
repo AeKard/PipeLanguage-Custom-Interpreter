@@ -35,11 +35,11 @@ This project made for final project on Programming Languages.</p>
 ---
 
 ### Interpreter Diagram
-<img src="./img/level1.png" alt="Interpreter Diagram" width="800">
+<img src="./img/level1.jpg" alt="Interpreter Diagram" width="800">
 
 ### Project Award 
-<img src="./img/awardPresentation.png" alt="Interpreter Diagram" width="800">
-<img src="./img/awardProject.png" alt="Interpreter Diagram" width="800">
+<img src="./img/awardPresentation.jpg" alt="Interpreter Diagram" width="800">
+<img src="./img/awardProject.jpg" alt="Interpreter Diagram" width="800">
 
 ### Compile
 To make changes edit `source.mpipe` 
